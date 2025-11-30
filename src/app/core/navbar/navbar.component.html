@@ -5,14 +5,29 @@
       <a routerLink="/">ONE WAY FULFILLMENT</a>
     </div>
 
+    <!-- Mobile hamburger (three lines as in your CSS) -->
+    <button
+      class="menu-toggle"
+      aria-label="Toggle menu"
+      (click)="toggleMenu()"
+      [class.active]="isMenuOpen"
+      type="button"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
     <!-- Navigation Links -->
-    <ul class="nav-links">
+    <ul class="nav-links" [class.active]="isMenuOpen">
       <li *ngFor="let link of navLinks">
-        <a 
-          [routerLink]="link.path" 
+        <a
+          (click)="closeMenu()"
+          [routerLink]="link.path"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
-          class="nav-link">
+          class="nav-link"
+        >
           {{ link.label }}
         </a>
       </li>

@@ -37,8 +37,6 @@
     pointer-events: none;    /* overlay won't block clicks */
   }
 
-  
-
   @media (max-width: 968px) {
     padding: 100px 30px 60px;
     margin-top: 60px;
@@ -50,7 +48,7 @@
   }
 
   h1 {
-      position: relative;
+    position: relative;
     font-size: 4.5rem;
     margin-bottom: 30px;
     line-height: 1.2;
@@ -66,7 +64,7 @@
   }
 
   p {
-   position: relative;
+    position: relative;
     z-index: 2;            // above overlay
     font-size: 1.25rem;
     max-width: 600px;
@@ -93,7 +91,6 @@
   background: transparent;
   z-index: 2;  // above overlay, below text
 
-  
   &:nth-child(1) {
     top: 15%;
     left: 8%;
@@ -125,15 +122,17 @@
     display: none;
   }
 }
+
 // *** FALLING BOX LAYER ***
 #falling-box-layer {
-   position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0; // crop boxes outside viewport
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0; // crop boxes outside viewport
 }
+
 // *** CANVAS CONTAINER - MUST HAVE SIZE ***
 #canvas-container {
   position: absolute;
@@ -164,6 +163,7 @@
     overflow: hidden;
   }
 }
+
 // *** HERO BUTTONS ***
 .hero-buttons {
   display: flex;
@@ -181,28 +181,30 @@
     cursor: pointer;
   }
 }
- .gradient-text {
-            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-size: 200% 200%;
-            animation: gradientShift 3s ease infinite;
-        }
-         @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-        
+
+.gradient-text {
+  background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% 200%;
+  animation: gradientShift 3s ease infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
 // *** STATS SECTION ***
 .stats {
-     position: relative;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 40px;
-            padding: 80px 50px;
-            z-index: 1;
-            background: rgba(26, 26, 26, 0.5);
-            backdrop-filter: blur(10px);
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 40px;
+  padding: 80px 50px;
+  z-index: 1;
+  background: rgba(26, 26, 26, 0.5);
+  backdrop-filter: blur(10px);
 
   @media (max-width: 968px) {
     padding: 60px 30px;
@@ -213,19 +215,18 @@
   }
 }
 
-
 .stat-item:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
-     }
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
+}
 
 .stat-item {
-      text-align: center;
-            padding: 30px;
-            border-radius: 20px;
-            background: rgba(0, 212, 255, 0.05);
-            border: 1px solid rgba(0, 212, 255, 0.2);
-            transition: transform 0.3s, box-shadow 0.3s;
+  text-align: center;
+  padding: 30px;
+  border-radius: 20px;
+  background: rgba(0, 212, 255, 0.05);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  transition: transform 0.3s, box-shadow 0.3s;
 
   .stat-number {
     font-size: 3.5rem;
@@ -241,7 +242,6 @@
       font-size: 2.5rem;
     }
   }
-  
 
   .stat-label {
     font-size: 1.1rem;
@@ -250,7 +250,7 @@
   }
 }
 
-// *** SERVICES SECTION ***
+// *** SERVICES SECTION (old grid – can be unused now, still fine) ***
 .services-section {
   padding: 120px 50px;
   background: rgba(10, 10, 10, 0.5);
@@ -314,6 +314,7 @@
   }
 }
 
+// (Grid card styles – harmless if not used)
 .service-card {
   background: rgba(26, 26, 26, 0.6);
   border: 1px solid rgba(0, 212, 255, 0.2);
@@ -362,7 +363,11 @@
 // *** CTA SECTION ***
 .cta-section {
   padding: 120px 50px;
-  background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(255, 0, 255, 0.05));
+  background: linear-gradient(
+    135deg,
+    rgba(0, 212, 255, 0.1),
+    rgba(255, 0, 255, 0.05)
+  );
   border-top: 1px solid rgba(0, 212, 255, 0.2);
   border-bottom: 1px solid rgba(0, 212, 255, 0.2);
 
@@ -408,5 +413,203 @@
 
   a {
     display: inline-block;
+  }
+}
+
+/* =======================================================
+   SERVICES PREVIEW - 3D CAROUSEL (EXACT DESIGN YOU SHARED)
+   ======================================================= */
+
+.services-preview {
+   position: relative;
+  padding: 50px 50px 80px; // ⬅️ was 100px 50px
+  z-index: 1;
+  overflow: hidden;
+
+  h2 {
+     font-size: 60px;
+    text-align: center;
+    margin-bottom: 40px; // ⬅️ was 80px
+    opacity: 0;
+  }
+
+  @media (max-width: 968px) {
+    padding: 80px 30px;
+  }
+
+  @media (max-width: 600px) {
+    padding: 60px 20px;
+  }
+}
+
+.carousel-container {
+  position: relative;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  perspective: 2000px;
+  height: 600px;
+}
+
+.carousel-track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 3D CARD STYLES FOR CAROUSEL */
+.services-preview .service-card {
+  position: absolute;
+  width: 380px;
+  height: 450px;
+  left: 50%;
+  top: 50%;
+  margin-left: -190px;
+  margin-top: -225px;
+  padding: 45px;
+  background: linear-gradient(
+    135deg,
+    rgba(26, 26, 26, 0.95),
+    rgba(0, 212, 255, 0.05)
+  );
+  border-radius: 25px;
+  border: 2px solid rgba(0, 212, 255, 0.3);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  box-shadow:
+    0 25px 80px rgba(0, 212, 255, 0.2),
+    inset 0 0 50px rgba(0, 212, 255, 0.05);
+}
+
+.services-preview .service-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    transparent,
+    rgba(255, 0, 255, 0.1)
+  );
+  border-radius: 25px;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.services-preview .service-card:hover::before {
+  opacity: 1;
+}
+
+.services-preview .service-card.active {
+  z-index: 10;
+  transform: translateZ(100px) scale(1.1);
+  box-shadow:
+    0 40px 120px rgba(0, 212, 255, 0.5),
+    inset 0 0 80px rgba(0, 212, 255, 0.1);
+}
+
+.services-preview .service-icon {
+  font-size: 64px;
+  margin-bottom: 25px;
+  display: inline-block;
+  animation: iconFloat 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.5));
+}
+
+@keyframes iconFloat {
+  0%, 100% { transform: translateY(0px); }
+  50%      { transform: translateY(-15px); }
+}
+
+.services-preview .service-card h3 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+}
+
+.services-preview .service-card p {
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.8;
+  font-size: 15px;
+}
+
+/* Carousel controls & indicators */
+.carousel-controls {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 60px;
+}
+
+.carousel-btn {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border: none;
+  color: var(--dark);
+  font-size: 24px;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 5px 20px rgba(0, 212, 255, 0.4);
+}
+
+.carousel-btn:hover {
+  transform: scale(1.15) translateY(-3px);
+  box-shadow: 0 10px 40px rgba(0, 212, 255, 0.6);
+}
+
+.carousel-indicators {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 30px;
+}
+
+.indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.indicator.active {
+  background: var(--primary);
+  width: 35px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px var(--primary);
+}
+
+/* Mobile tweaks for carousel */
+@media (max-width: 768px) {
+  .carousel-container {
+    height: 500px;
+  }
+
+  .services-preview .service-card {
+    width: 300px;
+    height: 400px;
+    margin-left: -150px;
+    margin-top: -200px;
+    padding: 30px;
+  }
+
+  .services-preview .service-card h3 {
+    font-size: 22px;
+  }
+
+  .services-preview .service-card p {
+    font-size: 14px;
   }
 }

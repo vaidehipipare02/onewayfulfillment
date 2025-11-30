@@ -22,4 +22,13 @@ export class NavbarComponent implements OnInit {
   ngOnInit(): void {
     // Additional navbar initialization if needed
   }
+  isMenuOpen = false;
+
+toggleMenu(): void {
+  this.isMenuOpen = !this.isMenuOpen;
+}
+
+closeMenu(): void {
+  this.isMenuOpen = false;
+}
 }

@@ -1,7 +1,8 @@
+<!-- home.component.html -->
 <div class="home-page">
   <!-- Hero Section with Falling Boxes Background -->
   <section class="hero" id="home">
-    <!-- This is where Three.js will render the falling boxes -->
+    <!-- Three.js canvas container -->
     <div id="canvas-container"></div>
 
     <!-- Floating decorative boxes -->
@@ -9,16 +10,15 @@
     <div class="floating-box"></div>
     <div class="floating-box"></div>
 
-    <!-- Main heading -->
+    <!-- Main heading (Typed will populate #typed-text & #typed-subheading) -->
     <h1 class="gradient-text">
-      <span id="typed-text"></span><br>
+      <span id="typed-text"></span><br />
       For Growing Brands
     </h1>
 
-    <!-- Subheading -->
     <p id="typed-subheading"></p>
 
-    <!-- Call-to-action buttons -->
+    <!-- Call-to-action -->
     <div class="hero-buttons">
       <a routerLink="/get-a-quote" class="primary-btn">Get Quote</a>
       <button class="secondary-btn" (click)="scrollToServices()">
@@ -29,70 +29,95 @@
 
   <!-- Stats Section -->
   <section class="stats">
-   
-      <div class="stat-item">
-        <div class="stat-number" data-target="99.9">0</div>
-        <div class="stat-label">% Accuracy</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-number" data-target="24">0</div>
-        <div class="stat-label">Hour Support</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-number" data-target="1000">0</div>
-        <div class="stat-label">Orders/Day</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-number" data-target="48">0</div>
-        <div class="stat-label">Hour Shipping</div>
-      </div>
-    
-  </section>
-
-  <!-- Services Section -->
-  <section class="services-section" id="services">
-    <div class="container">
-      <div class="section-header">
-        <h2 class="gradient-text">Our Services</h2>
-        <p>Comprehensive warehouse and fulfillment solutions for your e-commerce business</p>
-      </div>
-
-      <div class="services-grid">
-        <div class="service-card">
-          <div class="service-icon">📦</div>
-          <h3>Order Fulfillment</h3>
-          <p>Expert order fulfillment with guaranteed accuracy. We handle the complete process so you can focus on growing your business.</p>
-        </div>
-        <div class="service-card">
-          <div class="service-icon">🚚</div>
-          <h3>Fast Shipping</h3>
-          <p>Same-day and 2-day shipping options across the United States. Deliver an "Amazon Prime" experience.</p>
-        </div>
-        <div class="service-card">
-          <div class="service-icon">📊</div>
-          <h3>Inventory Management</h3>
-          <p>Real-time tracking and management with 99.9% accuracy guarantee. Never worry about stock discrepancies.</p>
-        </div>
-        <div class="service-card">
-          <div class="service-icon">↩️</div>
-          <h3>Returns Processing</h3>
-          <p>Streamlined returns processing that maintains customer satisfaction. Fast turnaround to get products back in stock.</p>
-        </div>
-        <div class="service-card">
-          <div class="service-icon">🔗</div>
-          <h3>Platform Integration</h3>
-          <p>Connect seamlessly with Shopify, WooCommerce, Amazon, and all major e-commerce platforms.</p>
-        </div>
-        <div class="service-card">
-          <div class="service-icon">🤝</div>
-          <h3>B2B & D2C Solutions</h3>
-          <p>Flexible solutions for both direct-to-consumer and business-to-business orders. One fulfillment partner for all.</p>
-        </div>
-      </div>
+    <div class="stat-item">
+      <div class="stat-number" data-target="99.9">0</div>
+      <div class="stat-label">% Accuracy</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number" data-target="24">0</div>
+      <div class="stat-label">Hour Support</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number" data-target="1000">0</div>
+      <div class="stat-label">Orders/Day</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number" data-target="48">0</div>
+      <div class="stat-label">Hour Shipping</div>
     </div>
   </section>
 
-  <!-- Call to Action Section -->
+  <!-- Services Preview - 3D Carousel (exact structure you provided) -->
+  <section class="services-preview" id="services">
+    <h2 class="gradient-text">Our Fulfillment Services</h2>
+
+    <div class="carousel-container">
+      <div class="carousel-track" id="carouselTrack">
+        <div class="service-card" data-index="0">
+          <div class="service-icon">📦</div>
+          <h3>Pick, Pack & Ship</h3>
+          <p>
+            Expert order fulfillment with guaranteed accuracy. We handle the complete
+            process so you can focus on growing your business and serving your customers.
+          </p>
+        </div>
+
+        <div class="service-card" data-index="1">
+          <div class="service-icon">🚚</div>
+          <h3>Fast US Shipping</h3>
+          <p>
+            Same-day and 2-day shipping options across the United States. Deliver an
+            "Amazon Prime" experience that keeps your customers coming back.
+          </p>
+        </div>
+
+        <div class="service-card" data-index="2">
+          <div class="service-icon">📊</div>
+          <h3>Inventory Management</h3>
+          <p>
+            Real-time tracking and management with 99.9% accuracy guarantee. Never worry
+            about stock discrepancies or inventory shrinkage again.
+          </p>
+        </div>
+
+        <div class="service-card" data-index="3">
+          <div class="service-icon">🔄</div>
+          <h3>Returns Management</h3>
+          <p>
+            Streamlined returns processing that maintains customer satisfaction. Fast
+            turnaround to get products back in stock and ready to ship.
+          </p>
+        </div>
+
+        <div class="service-card" data-index="4">
+          <div class="service-icon">🌐</div>
+          <h3>Platform Integration</h3>
+          <p>
+            Connect seamlessly with Shopify, WooCommerce, Amazon, and all major
+            e-commerce platforms. One system for all your sales channels.
+          </p>
+        </div>
+
+        <div class="service-card" data-index="5">
+          <div class="service-icon">🎯</div>
+          <h3>B2B & DTC Fulfillment</h3>
+          <p>
+            Flexible solutions for both direct-to-consumer and business-to-business orders.
+            One fulfillment partner for all your distribution needs.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="carousel-controls">
+      <button class="carousel-btn" id="prevBtn">‹</button>
+      <button class="carousel-btn" id="nextBtn">›</button>
+    </div>
+
+    <div class="carousel-indicators" id="indicators"></div>
+  </section>
+
+  <!-- CTA Section -->
   <section class="cta-section">
     <div class="container">
       <div class="cta-content">
