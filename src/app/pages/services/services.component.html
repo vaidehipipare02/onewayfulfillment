@@ -1,41 +1,67 @@
-<div class="services-page">
-  <!-- Page Header -->
-  <section class="page-header">
-    <div class="container">
-      <h1 class="gradient-text">Our Services</h1>
-      <p>Comprehensive warehouse and fulfillment solutions tailored to your business needs</p>
-    </div>
-  </section>
+<section class="services-section">
+  <!-- Floating Background Shapes -->
+  <div class="floating-shapes">
+    <div class="floating-shape shape-1"></div>
+    <div class="floating-shape shape-2"></div>
+    <div class="floating-shape shape-3"></div>
+    <div class="floating-shape shape-4"></div>
+  </div>
 
-  <!-- Services Grid -->
-  <section class="services-detail-section">
-    <div class="container">
-      <div class="services-detail-grid">
-        <div *ngFor="let service of servicesDetail" class="service-detail-card">
-          <div class="card-header">
-            <h3 class="gradient-text">{{ service.title }}</h3>
+  <div class="container">
+    <!-- Section Header -->
+    <div class="section-header">
+      <h2 class="services-title gradient-text">Our Fulfillment Services</h2>
+      <p class="section-subtitle">Complete logistics solutions tailored to your business needs</p>
+    </div>
+
+    <!-- Services Grid -->
+    <div class="services-grid">
+      <div 
+        *ngFor="let service of services" 
+        class="service-card"
+        [class.active]="activeService === service.id"
+        (mouseenter)="onServiceHover(service.id)"
+        (mouseleave)="onServiceLeave()"
+        (click)="selectService(service.id)"
+      >
+        <!-- Card Content Wrapper -->
+        <div class="card-content">
+          <!-- Icon -->
+          <div class="service-icon">
+            {{ service.icon }}
           </div>
+
+          <!-- Title -->
+          <h3 class="service-title">{{ service.title }}</h3>
+
+          <!-- Description -->
           <p class="service-description">{{ service.description }}</p>
-          <div class="features">
-            <h4>Key Features:</h4>
-            <ul>
-              <li *ngFor="let feature of service.features">
-                <span class="checkmark">✓</span>
-                {{ feature }}
-              </li>
-            </ul>
+
+          <!-- Details (shown on active) -->
+          <div class="service-details" *ngIf="activeService === service.id">
+            <div class="details-box">
+              <p class="details-text">{{ service.details }}</p>
+              <div class="detail-accent"></div>
+            </div>
           </div>
+
+          <!-- Hover Indicator -->
+          <div class="hover-indicator" *ngIf="hoveredService === service.id"></div>
         </div>
+
+        <!-- Border Animation Element -->
+        <div class="card-border"></div>
+
+        <!-- Gradient Overlay -->
+        <div class="card-gradient"></div>
       </div>
     </div>
-  </section>
 
-  <!-- CTA -->
-  <section class="services-cta">
-    <div class="container">
-      <h2 class="gradient-text">Ready to Get Started?</h2>
-      <p>Let us handle your fulfillment while you focus on growing your business.</p>
-      <a routerLink="/get-a-quote" class="primary-btn">Get Your Quote Today</a>
+    <!-- CTA Section -->
+    <div class="services-cta">
+      <h3>Ready to Streamline Your Logistics?</h3>
+      <p>Get started with our fulfillment services today</p>
+      <button class="cta-button" routerLink="/get-a-quote">Get Your Quote</button>
     </div>
-  </section>
-</div>
+  </div>
+</section>

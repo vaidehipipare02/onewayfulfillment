@@ -208,13 +208,17 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     for (let i = 0; i < 25; i++) {
       const group = this.createRealisticBox();
       group.position.x = (Math.random() - 0.5) * 20;
-      group.position.y = Math.random() * 30 + 10;
-      group.position.z = (Math.random() - 0.5) * 20;
+  // start below viewport so boxes float UP into view
+  group.position.y = -(Math.random() * 20 + 10);
+  group.position.z = (Math.random() - 0.5) * 20;
       group.rotation.x = Math.random() * Math.PI;
       group.rotation.y = Math.random() * Math.PI;
       group.rotation.z = Math.random() * Math.PI;
 
-      group.userData.fallSpeed = Math.random() * 0.008 + 0.005;
+       // slower upward speed: 0.002 — 0.006 (tweak these numbers to taste)
+  group.userData.fallSpeed = Math.random() * 0.004 + 0.002;
+  // slower acceleration increment (was 0.0001 before)
+  group.userData.accel = 0.00002;
       group.userData.rotationSpeedX = (Math.random() - 0.5) * 0.01;
       group.userData.rotationSpeedY = (Math.random() - 0.5) * 0.01;
       group.userData.rotationSpeedZ = (Math.random() - 0.5) * 0.008;

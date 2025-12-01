@@ -14,7 +14,8 @@ export class NavbarComponent implements OnInit {
     { label: 'Home', path: '/' },
     { label: 'Services', path: '/services' },
     { label: 'About Us', path: '/about-us' },
-    { label: 'Get Quote', path: '/get-a-quote' }
+    { label: 'Get Quote', path: '/get-a-quote' },
+    { label: 'Our Guarantee', path: '/guarantee' }
   ];
 
   constructor() {}
