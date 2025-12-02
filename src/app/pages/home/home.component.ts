@@ -1,4 +1,3 @@
-// home.component.ts
 import {
   Component,
   OnInit,
@@ -10,10 +9,12 @@ import {
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
+
 declare const gsap: any;
 declare const ScrollTrigger: any;
 declare const Typed: any;
 declare const THREE: any;
+
 
 @Component({
   selector: 'app-home',
@@ -31,61 +32,61 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   private fallingBoxes: any[] = [];
   private animationFrameId: any = null;
   private isAnimating = false;
+  private boxCreateInterval: any = null;
+  private totalBoxesCreated = 0;
+  private maxBoxes = 25;
+
 
   // Carousel
   private carouselCards: HTMLElement[] = [];
   private currentIndex = 0;
   private carouselAutoRotate: any = null;
 
+
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+
 
   ngOnInit(): void {
     // nothing for now
   }
 
+
   ngAfterViewInit(): void {
     if (!isPlatformBrowser(this.platformId)) return;
-    // small timeout to ensure DOM is ready and third-party scripts loaded
     setTimeout(() => this.initAll(), 200);
   }
 
-  // Scroll helper for CTA button
+
   scrollToServices(): void {
     document.querySelector('#services')?.scrollIntoView({ behavior: 'smooth' });
   }
 
-  // MASTER INIT
+
   private initAll(): void {
     if (typeof ScrollTrigger !== 'undefined' && typeof gsap !== 'undefined') {
       gsap.registerPlugin(ScrollTrigger);
     }
 
+
     this.initHeroAnimations();
     this.initTypedText();
     this.initFloatingBoxes();
     this.initStatsAnimation();
-
-    // THREE canvas
     this.initFallingBoxes();
-
-    // Carousel setup (uses your exact JS logic)
     this.initCarousel();
-
-    // Services cards animation trigger (fires updateCarousel on enter)
     this.initServicesTrigger();
-
-    // Smooth anchors + mobile menu + quote interactions
     this.initSmoothScroll();
     this.initMobileMenu();
     this.initQuoteInteractions();
   }
 
-  // HERO FADE-INS
+
   private initHeroAnimations(): void {
     if (typeof gsap === 'undefined') return;
     const heroTitle = document.querySelector('.hero h1');
     const heroText = document.querySelector('.hero p');
     const heroButtons = document.querySelector('.hero-buttons');
+
 
     if (heroTitle) {
       gsap.to(heroTitle, { opacity: 1, y: 0, duration: 1, delay: 0.5, ease: 'power3.out' });
@@ -98,7 +99,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  // TYPED.JS
+
   private initTypedText(): void {
     if (typeof Typed === 'undefined') return;
 
@@ -133,7 +134,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  // FLOATING NEON BOXES (GSAP)
+
   private initFloatingBoxes(): void {
     if (typeof gsap === 'undefined') return;
     const boxes = document.querySelectorAll('.floating-box');
@@ -150,7 +151,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  // STATS COUNTER
+
   private initStatsAnimation(): void {
     if (typeof gsap === 'undefined') return;
     const statNumbers = document.querySelectorAll('.stat-number');
@@ -170,8 +171,9 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+
   // ---------------------------
-  // THREE.JS: Falling Boxes
+  // THREE.JS: Falling Boxes - CONTINUOUS STREAM
   // ---------------------------
   private initFallingBoxes(): void {
     if (typeof THREE === 'undefined') {
@@ -204,69 +206,62 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     directional.position.set(3, 5, 2);
     this.scene.add(directional);
 
-    // realistic boxes (25)
-    for (let i = 0; i < 25; i++) {
-      const group = this.createRealisticBox();
-      group.position.x = (Math.random() - 0.5) * 20;
-  // start below viewport so boxes float UP into view
-  group.position.y = -(Math.random() * 20 + 10);
-  group.position.z = (Math.random() - 0.5) * 20;
-      group.rotation.x = Math.random() * Math.PI;
-      group.rotation.y = Math.random() * Math.PI;
-      group.rotation.z = Math.random() * Math.PI;
-
-       // slower upward speed: 0.002 — 0.006 (tweak these numbers to taste)
-  group.userData.fallSpeed = Math.random() * 0.004 + 0.002;
-  // slower acceleration increment (was 0.0001 before)
-  group.userData.accel = 0.00002;
-      group.userData.rotationSpeedX = (Math.random() - 0.5) * 0.01;
-      group.userData.rotationSpeedY = (Math.random() - 0.5) * 0.01;
-      group.userData.rotationSpeedZ = (Math.random() - 0.5) * 0.008;
-      group.userData.swingAmplitude = Math.random() * 0.5 + 0.3;
-      group.userData.swingSpeed = Math.random() * 0.02 + 0.01;
-      group.userData.swingOffset = Math.random() * Math.PI * 2;
-
-      this.scene.add(group);
-      this.boxes.push(group);
-      this.fallingBoxes.push(group);
-    }
-
-    // a few wireframe medium boxes
-    const mediumGeometry = new THREE.BoxGeometry(0.6, 0.6, 0.6);
-    for (let i = 0; i < 2; i++) {
-      const material = new THREE.MeshBasicMaterial({
-        color: i % 2 === 0 ? 0x00d4ff : 0xff00ff,
-        wireframe: true
-      });
-      const box = new THREE.Mesh(mediumGeometry, material);
-      box.position.x = (Math.random() - 0.5) * 20;
-      box.position.y = (Math.random() - 0.5) * 20;
-      box.position.z = (Math.random() - 0.5) * 20;
-      box.rotation.x = Math.random() * Math.PI;
-      box.rotation.y = Math.random() * Math.PI;
-      this.scene.add(box);
-      this.boxes.push(box);
-    }
-
-    // small wireframe packages
-    const smallGeometry = new THREE.BoxGeometry(0.3, 0.3, 0.3);
-    for (let i = 0; i < 15; i++) {
-      const material = new THREE.MeshBasicMaterial({ color: 0xffff00, wireframe: true });
-      const smallBox = new THREE.Mesh(smallGeometry, material);
-      smallBox.position.x = (Math.random() - 0.5) * 20;
-      smallBox.position.y = (Math.random() - 0.5) * 20;
-      smallBox.position.z = (Math.random() - 0.5) * 20;
-      smallBox.rotation.x = Math.random() * Math.PI;
-      smallBox.rotation.y = Math.random() * Math.PI;
-      this.scene.add(smallBox);
-      this.boxes.push(smallBox);
-    }
-
+    // Start animation loop FIRST
     this.isAnimating = true;
     this.animate();
 
+    // Then START creating boxes at intervals (continuous stream)
+    this.startBoxStream();
+
     window.addEventListener('resize', () => this.onWindowResize(container));
   }
+
+
+  // ✨ NEW: Stream boxes continuously instead of batch-creating
+  private startBoxStream(): void {
+    // Create first box immediately
+    this.createAndAddBox();
+
+    // Then create new boxes every 300ms (adjust this value for desired frequency)
+    // Lower = faster stream, Higher = slower stream
+    this.boxCreateInterval = setInterval(() => {
+      if (this.totalBoxesCreated < this.maxBoxes) {
+        this.createAndAddBox();
+      } else {
+        // Once we reach max, restart the cycle (keep stream continuous)
+        this.totalBoxesCreated = 0;
+      }
+    }, 300); // 300ms between box creation
+  }
+
+
+  // ✨ NEW: Create and add a single box
+  private createAndAddBox(): void {
+    if (!this.scene || this.totalBoxesCreated >= this.maxBoxes) return;
+
+    const group = this.createRealisticBox();
+    group.position.x = (Math.random() - 0.5) * 20;
+    group.position.y = 15; // Start at top (visible area)
+    group.position.z = (Math.random() - 0.5) * 20;
+    group.rotation.x = Math.random() * Math.PI;
+    group.rotation.y = Math.random() * Math.PI;
+    group.rotation.z = Math.random() * Math.PI;
+
+    group.userData.fallSpeed = Math.random() * 0.004 + 0.002;
+    group.userData.accel = 0.00002;
+    group.userData.rotationSpeedX = (Math.random() - 0.5) * 0.01;
+    group.userData.rotationSpeedY = (Math.random() - 0.5) * 0.01;
+    group.userData.rotationSpeedZ = (Math.random() - 0.5) * 0.008;
+    group.userData.swingAmplitude = Math.random() * 0.5 + 0.3;
+    group.userData.swingSpeed = Math.random() * 0.02 + 0.01;
+    group.userData.swingOffset = Math.random() * Math.PI * 2;
+
+    this.scene.add(group);
+    this.boxes.push(group);
+    this.fallingBoxes.push(group);
+    this.totalBoxesCreated++;
+  }
+
 
   private createRealisticBox(): any {
     const boxGroup = new THREE.Group();
@@ -311,6 +306,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     return boxGroup;
   }
 
+
   // animation loop
   private animate = (): void => {
     if (!this.isAnimating) return;
@@ -326,8 +322,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       box.rotation.y += data.rotationSpeedY ?? 0;
       box.rotation.z += data.rotationSpeedZ ?? 0;
 
-      box.position.x += Math.sin(time * (data.swingSpeed ?? 0.02) + (data.swingOffset ?? 0)) * (data.swingAmplitude ?? 0.5) * 0.01;
-      box.position.z += Math.cos(time * (data.swingSpeed ?? 0.02) * 0.7 + (data.swingOffset ?? 0)) * 0.005;
+      box.position.x += Math.sin(time * (data.swingSpeed ?? 0.01) + (data.swingOffset ?? 0)) * (data.swingAmplitude ?? 0.5) * 0.01;
+      box.position.z += Math.cos(time * (data.swingSpeed ?? 0.01) * 0.7 + (data.swingOffset ?? 0)) * 0.005;
 
       if (box.position.y < -10) {
         box.position.y = Math.random() * 10 + 20;
@@ -341,17 +337,11 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     });
 
-    this.boxes.forEach(b => {
-      if (!this.fallingBoxes.includes(b)) {
-        b.rotation.x += 0.001;
-        b.rotation.y += 0.002;
-      }
-    });
-
     if (this.renderer && this.scene && this.camera) {
       this.renderer.render(this.scene, this.camera);
     }
   };
+
 
   private onWindowResize(container: HTMLElement): void {
     if (!this.camera || !this.renderer) return;
@@ -362,20 +352,16 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.renderer.setSize(width, height);
   }
 
-  // ---------------------------
-  // Carousel (exact JS behavior you posted)
-  // ---------------------------
+
   private initCarousel(): void {
     const cardsNodeList = document.querySelectorAll('.service-card');
     if (!cardsNodeList.length) return;
 
-    // Use the NodeList reference in the same way the original JS did
     const cards = Array.from(cardsNodeList) as HTMLElement[];
     const totalCards = cards.length;
     const indicators = document.getElementById('indicators');
     if (!indicators) return;
 
-    // create indicators
     indicators.innerHTML = '';
     for (let i = 0; i < totalCards; i++) {
       const indicator = document.createElement('div');
@@ -385,19 +371,14 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       indicators.appendChild(indicator);
     }
 
-    // store the cards array for later updates
     this.carouselCards = cards;
-
-    // set initial positions (mirrors updateCarousel logic)
     this.updateCarousel();
 
-    // next/prev buttons
     const nextBtn = document.getElementById('nextBtn');
     const prevBtn = document.getElementById('prevBtn');
     nextBtn?.addEventListener('click', () => this.nextSlide());
     prevBtn?.addEventListener('click', () => this.prevSlide());
 
-    // auto-rotate
     this.carouselAutoRotate = setInterval(() => this.nextSlide(), 2500);
 
     const container = document.querySelector('.carousel-container');
@@ -409,6 +390,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+
   private updateCarousel(): void {
     const cards = this.carouselCards;
     const totalCards = cards.length;
@@ -418,10 +400,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       const diff = index - this.currentIndex;
       const absIndex = ((index - this.currentIndex) + totalCards) % totalCards;
 
-      // Reset classes
       card.classList.remove('active');
 
-      // Position cards in 3D space
       let translateX = 0;
       let translateZ = -300;
       let rotateY = 0;
@@ -429,7 +409,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       let scale = 0.7;
 
       if (absIndex === 0) {
-        // Center card (active)
         translateX = 0;
         translateZ = 0;
         rotateY = 0;
@@ -437,21 +416,18 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
         scale = 1;
         card.classList.add('active');
       } else if (absIndex === 1) {
-        // Right card
         translateX = 450;
         translateZ = -200;
         rotateY = -45;
         opacity = 0.6;
         scale = 0.85;
       } else if (absIndex === totalCards - 1) {
-        // Left card
         translateX = -450;
         translateZ = -200;
         rotateY = 45;
         opacity = 0.6;
         scale = 0.85;
       } else {
-        // Hidden cards
         translateX = diff > 0 ? 800 : -800;
         translateZ = -400;
         rotateY = diff > 0 ? -60 : 60;
@@ -464,12 +440,12 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       card.style.zIndex = absIndex === 0 ? '10' : String(5 - absIndex);
     });
 
-    // indicators
     const indicators = document.querySelectorAll('.indicator');
     indicators.forEach((ind, index) => {
       ind.classList.toggle('active', index === this.currentIndex);
     });
   }
+
 
   private nextSlide(): void {
     const count = this.carouselCards.length;
@@ -478,12 +454,14 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.updateCarousel();
   }
 
+
   private prevSlide(): void {
     const count = this.carouselCards.length;
     if (!count) return;
     this.currentIndex = (this.currentIndex - 1 + count) % count;
     this.updateCarousel();
   }
+
 
   private goToSlide(index: number): void {
     const count = this.carouselCards.length;
@@ -492,7 +470,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.updateCarousel();
   }
 
-  // trigger services section animation (calls updateCarousel onEnter)
+
   private initServicesTrigger(): void {
     if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
     const cards = document.querySelectorAll('.service-card');
@@ -509,7 +487,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  // Smooth scroll anchors
+
   private initSmoothScroll(): void {
     const anchors = document.querySelectorAll('a[href^="#"]');
     anchors.forEach(anchor => {
@@ -524,7 +502,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  // Mobile menu toggle (uses .menu-toggle and .nav-links if present)
+
   private initMobileMenu(): void {
     const menuToggle = document.querySelector('.menu-toggle');
     const navLinks = document.querySelector('.nav-links');
@@ -541,7 +519,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  // Quote interactions (quote-trigger + quote form)
+
   private initQuoteInteractions(): void {
     const quoteTrigger = document.getElementById('quote-trigger');
     const quotePage = document.getElementById('quote-page');
@@ -610,11 +588,12 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  // CLEANUP
+
   private cleanup(): void {
     this.isAnimating = false;
     if (this.animationFrameId) cancelAnimationFrame(this.animationFrameId);
     if (this.carouselAutoRotate) clearInterval(this.carouselAutoRotate);
+    if (this.boxCreateInterval) clearInterval(this.boxCreateInterval);
     if (this.renderer) {
       try {
         if (this.renderer.domElement?.parentNode) {
@@ -632,7 +611,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.renderer = null;
   }
 
+
   ngOnDestroy(): void {
     this.cleanup();
-  }
+  }
 }

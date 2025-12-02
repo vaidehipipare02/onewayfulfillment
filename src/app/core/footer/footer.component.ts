@@ -21,10 +21,10 @@ export class FooterComponent {
 
   services = [
     'Order Fulfillment',
-    'Fast Shipping',
-    'Inventory Management',
-    'Returns Processing',
-    'Platform Integration'
+    'Omnichannel Fulfillment',
+    'Big, Heavy & Bulky Fulfillment',
+    'Amazon Fulfillment',
+    'Seller Fulfilled Prime'
   ];
 
   company = [
@@ -36,8 +36,8 @@ export class FooterComponent {
   ];
 
   contact = [
-    { icon: '📧', text: 'support@oneway-fulfillment.com', label: 'Email' },
-    { icon: '📞', text: '+1 (800) 555-0123', label: 'Phone' },
-    { icon: '📍', text: '123 Warehouse Dr, Industrial Park, CA 90210', label: 'Address' }
+    { icon: '📧', text: 'wgardner@onewayfulfillment.com', label: 'Email' },
+    { icon: '📞', text: '+1 (410) 736-2327', label: 'Phone' },
+    { icon: '📍', text: '1543 Columbia Ave Franklin TN 37064', label: 'Address' }
   ];
 }

@@ -40,10 +40,12 @@
                     <option>Other</option>
                   </select>
                 </label>
+                <!--
                 <label>
                   Website
                   <input formControlName="website" placeholder="https://" />
                 </label>
+                -->
               </div>
 
               <!-- Contact group -->
@@ -74,18 +76,39 @@
               <h4>— What Services Do You Need? —</h4>
 
               <div class="checkbox-grid">
-                <label><input type="checkbox" formControlName="dtc" /> DTC Fulfillment</label>
-                <label><input type="checkbox" formControlName="b2b" /> B2B & Wholesale</label>
-                <label><input type="checkbox" formControlName="amazon" /> Amazon FBM</label>
-                <label><input type="checkbox" formControlName="returns" /> Returns Processing</label>
-                <label><input type="checkbox" formControlName="kitting" /> Custom Kitting</label>
-                <label><input type="checkbox" formControlName="freight" /> Shipping & Freight</label>
+                <label>
+                  <input type="checkbox" formControlName="dtc" />
+                  DTC Fulfillment
+                </label>
+                <label>
+                  <input type="checkbox" formControlName="b2b" />
+                  B2B & Wholesale
+                </label>
+                <label>
+                  <input type="checkbox" formControlName="amazon" />
+                  Amazon FBM
+                </label>
+                <label>
+                  <input type="checkbox" formControlName="returns" />
+                  Returns Processing
+                </label>
+                <label>
+                  <input type="checkbox" formControlName="kitting" />
+                  Custom Kitting
+                </label>
+                <label>
+                  <input type="checkbox" formControlName="freight" />
+                  Shipping & Freight
+                </label>
               </div>
 
               <div class="form-grid">
                 <label>
                   Monthly Order Volume
-                  <input formControlName="monthlyVolume" placeholder="e.g. 5,000" />
+                  <input
+                    formControlName="monthlyVolume"
+                    placeholder="e.g. 5,000"
+                  />
                 </label>
                 <label>
                   Average Order Weight (kg)
@@ -118,10 +141,6 @@
                     placeholder="e.g. 10x10x5 cm"
                   />
                 </label>
-                <label class="toggle-label">
-                  Pallet Requirement
-                  <input type="checkbox" formControlName="palletRequired" />
-                </label>
               </div>
             </div>
 
@@ -138,10 +157,6 @@
                     <option>Amazon</option>
                     <option>Custom</option>
                   </select>
-                </label>
-                <label class="toggle-label">
-                  API Access
-                  <input type="checkbox" formControlName="apiAccess" />
                 </label>
                 <label>
                   Sync options
@@ -216,7 +231,7 @@
             <li>Personalized proposal sent</li>
           </ol>
           <div class="success-actions">
-            <a class="btn-secondary" routerLink=" ">Back to Home</a>
+            <!-- <a class="btn-secondary" routerLink=" ">Back to Home</a> -->
             <button class="btn-primary" (click)="downloadPdf()">
               Download PDF
             </button>

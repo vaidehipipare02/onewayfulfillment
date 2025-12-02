@@ -1,44 +1,58 @@
 // ============================================
-// GLOBAL STYLES & DESIGN SYSTEM
+// GLOBAL STYLES & DESIGN SYSTEM (LIGHT THEME)
+// Fresh Linen palette (light, fresh, attractive)
 // ============================================
 
 // *** COLOR VARIABLES ***
+
 :root {
-  --primary: #00d4ff;        // Cyan
-  --secondary: #ff00ff;       // Magenta
-  --accent: #ffff00;          // Yellow
-  --dark: #0a0a0a;           // Dark background
-  --light: #ffffff;          // Light text
-  --gray: #1a1a1a;           // Gray surfaces
-  --gray-light: #2a2a2a;     // Lighter gray
-  --orange: #FFA500;         // Orange accent
+  --primary: #22c1a9;        /* Mint-teal (buttons, highlights) */
+  --secondary: #60a5fa;      /* Soft sky blue (accents) */
+  --accent: #ffd166;         /* Warm lemon (micro accents) */
+
+  --bg: #f7fbff;             /* Page background (very light) */
+  --surface: #ffffff;        /* Cards / panels */
+  --text-primary: #0f1724;   /* Dark slate for main text */
+  --text-muted: #6b7280;     /* Secondary text */
+  --border-subtle: #e6eefc;  /* Light border / subtle divider */
+
+  --success: #16a34a;
+  --error: #dc2626;
+  --warning: #f59e0b;
 }
 
-// *** RESET ***
+/* ==========================================
+   RESET
+   ========================================== */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-// *** BASE STYLES ***
+/* ==========================================
+   BASE STYLES
+   ========================================== */
 html {
   scroll-behavior: smooth;
 }
 
 body {
   font-family: 'Inter', sans-serif;
-  background-color: var(--dark);
-  color: var(--light);
+  background-color: var(--bg);
+  color: var(--text-primary);
   overflow-x: hidden;
   line-height: 1.6;
 }
 
-// *** TYPOGRAPHY ***
+/* ==========================================
+   TYPOGRAPHY
+   ========================================== */
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Montserrat', sans-serif;
   font-weight: 700;
   line-height: 1.2;
+  color: var(--text-primary);
 }
 
 h1 { font-size: 4rem; }
@@ -51,22 +65,27 @@ h6 { font-size: 1rem; }
 p {
   font-size: 1rem;
   line-height: 1.8;
+  color: var(--text-primary);
 }
 
-// *** GRADIENT TEXT ***
+/* ==========================================
+   GRADIENT TEXT
+   ========================================== */
 .gradient-text {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-// *** BUTTONS ***
+/* ==========================================
+   BUTTONS
+   ========================================== */
 .primary-btn {
   display: inline-block;
   padding: 14px 40px;
   background: linear-gradient(135deg, var(--primary), var(--secondary));
-  color: var(--dark);
+  color: var(--surface);
   text-decoration: none;
   border-radius: 8px;
   font-weight: 600;
@@ -74,10 +93,11 @@ p {
   border: none;
   cursor: pointer;
   font-size: 1rem;
+  box-shadow: 0 6px 20px rgba(34, 193, 169, 0.18);
 
   &:hover {
     transform: translateY(-3px);
-    box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4);
+    box-shadow: 0 12px 34px rgba(34, 193, 169, 0.18);
   }
 
   &:active {
@@ -89,7 +109,7 @@ p {
   display: inline-block;
   padding: 14px 40px;
   background: transparent;
-  color: var(--light);
+  color: var(--primary);
   border: 2px solid var(--primary);
   border-radius: 8px;
   font-weight: 600;
@@ -98,8 +118,8 @@ p {
   font-size: 1rem;
 
   &:hover {
-    background: rgba(0, 212, 255, 0.1);
-    box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
+    background: rgba(34, 193, 169, 0.06);
+    box-shadow: 0 8px 24px rgba(34, 193, 169, 0.08);
   }
 
   &:active {
@@ -107,18 +127,22 @@ p {
   }
 }
 
-// *** LINKS ***
+/* ==========================================
+   LINKS
+   ========================================== */
 a {
-  color: var(--light);
+  color: var(--primary);
   text-decoration: none;
   transition: color 0.3s ease;
 
   &:hover {
-    color: var(--primary);
+    color: var(--secondary);
   }
 }
 
-// *** CONTAINER ***
+/* ==========================================
+   CONTAINER
+   ========================================== */
 .container {
   max-width: 1400px;
   margin: 0 auto;
@@ -133,13 +157,15 @@ a {
   }
 }
 
-// *** SCROLLBAR ***
+/* ==========================================
+   SCROLLBAR (LIGHT)
+   ========================================== */
 ::-webkit-scrollbar {
   width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--dark);
+  background: var(--bg);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -151,22 +177,67 @@ a {
   }
 }
 
-// *** FORMS ***
-input, textarea, select {
+/* ==========================================
+   FORMS
+   ========================================== */
+input,
+textarea,
+select {
   font-family: inherit;
-  
+  color: var(--text-primary);
+  background-color: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 10px 12px;
+
   &::placeholder {
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(15, 23, 42, 0.35); /* soft slate placeholder */
   }
 
   &:focus {
     outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 6px rgba(34, 193, 169, 0.06);
+    background-color: var(--surface);
   }
 }
 
-// *** UTILITY CLASSES ***
+/* ==========================================
+   UTILITY CLASSES
+   ========================================== */
 .mt-4 { margin-top: 1rem; }
 .mt-8 { margin-top: 2rem; }
 .mb-4 { margin-bottom: 1rem; }
 .mb-8 { margin-bottom: 2rem; }
 .text-center { text-align: center; }
+.hidden { display: none !important; }
+.flex { display: flex; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+
+/* ==========================================
+   OPTIONAL: subtle card and surface helpers
+   (use throughout components for consistent look)
+   ========================================== */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+  color: var(--text-primary);
+}
+
+.surface-soft {
+  background: linear-gradient(180deg, var(--surface), #fbfdff);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+}
+
+/* ==========================================
+   SMALL RESPONSIVE TWEAKS
+   ========================================== */
+@media (max-width: 768px) {
+  h1 { font-size: 2.4rem; }
+  h2 { font-size: 2rem; }
+  .primary-btn, .secondary-btn { padding: 12px 28px; }
+}

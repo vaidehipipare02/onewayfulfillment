@@ -1,19 +1,23 @@
-/* NAVBAR (using your .navbar structure) */
+/* ============================
+   NAVBAR – LIGHT THEME
+   ============================ */
+
 .navbar {
   position: fixed;
   top: 0;
   width: 100%;
-  padding: 20px 50px;
-  background: rgba(10, 10, 10, 0.8);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+  padding: 16px 50px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--border-subtle);
   z-index: 1000;
 
   @media (max-width: 968px) {
-    padding: 15px 30px;
+    padding: 14px 30px;
   }
+
   @media (max-width: 600px) {
-    padding: 15px 20px;
+    padding: 12px 20px;
   }
 }
 
@@ -42,7 +46,7 @@
   }
 }
 
-/* the three-line hamburger exactly like your CSS */
+/* the three-line hamburger */
 .menu-toggle {
   display: none;
   flex-direction: column;
@@ -59,7 +63,7 @@
   span {
     width: 30px;
     height: 3px;
-    background: var(--light);
+    background: var(--text-primary);
     border-radius: 2px;
     transition: all 0.3s;
     display: block;
@@ -85,7 +89,7 @@
   list-style: none;
   justify-content: center;
   align-items: center;
-  flex: 1 1 auto;      /* take remaining space */
+  flex: 1 1 auto;
   margin: 0;
   padding: 0;
 }
@@ -93,11 +97,11 @@
 /* individual link */
 .nav-link {
   position: relative;
-  color: var(--light);
+  color: var(--text-primary);
   text-decoration: none;
-  font-size: 16px;
+  font-size: 0.98rem;
   font-weight: 500;
-  transition: color 0.3s;
+  transition: color 0.25s ease;
   padding-bottom: 5px;
 }
 
@@ -109,7 +113,7 @@
   width: 0;
   height: 2px;
   background: linear-gradient(90deg, var(--primary), var(--secondary));
-  transition: width 0.3s;
+  transition: width 0.25s ease;
 }
 
 .nav-link:hover::after,
@@ -123,25 +127,26 @@
 
 /* CTA on the right */
 .cta-btn {
-  padding: 12px 30px;
+  padding: 10px 26px;
   background: linear-gradient(135deg, var(--primary), var(--secondary));
   border: none;
-  border-radius: 50px;
-  color: var(--dark);
-  font-weight: bold;
+  border-radius: 999px;
+  color: #ffffff;
+  font-weight: 600;
   cursor: pointer;
-  transition: transform 0.3s, box-shadow 0.3s;
-  font-size: 14px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  font-size: 0.95rem;
   flex: 0 0 auto;
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.25);
 }
 
 .cta-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 30px rgba(0, 212, 255, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(37, 99, 235, 0.32);
 }
 
 /* -------------------------
-   MOBILE (match your posted CSS)
+   MOBILE
    ------------------------- */
 @media (max-width: 768px) {
   /* show hamburger */
@@ -150,7 +155,7 @@
     z-index: 1001;
   }
 
-  /* slide-in panel for links (matches your provided block) */
+  /* slide-in panel for links – light version */
   .nav-links {
     position: fixed;
     top: 0;
@@ -158,29 +163,39 @@
     width: 70%;
     height: 100vh;
     flex-direction: column;
-    background: rgba(10, 10, 10, 0.95);
-    padding: 100px 40px;
-    transition: right 0.4s;
+    background: #ffffff;
+    padding: 100px 32px 40px;
+    transition: right 0.4s ease;
     backdrop-filter: blur(20px);
     z-index: 1000;
     gap: 24px;
     justify-content: flex-start;
+    box-shadow: -10px 0 30px rgba(15, 23, 42, 0.15);
   }
 
   .nav-links.active {
     right: 0;
   }
 
-  .nav-links li { margin-bottom: 8px; }
+  .nav-links li {
+    margin-bottom: 8px;
+  }
 
   .nav-link {
     font-size: 1.05rem;
     padding: 10px 0;
     display: block;
+    color: var(--text-primary);
   }
 
-  /* Keep the CTA visible (adjust if you prefer it inside the panel) */
+  .nav-link::after {
+    bottom: 0;
+  }
+
+  /* CTA – slightly smaller on mobile */
   .cta-btn {
-    margin-left: 10px;
+    margin-left: 8px;
+    padding: 9px 22px;
+    font-size: 0.9rem;
   }
 }

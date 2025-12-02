@@ -1,3 +1,7 @@
+<!-- ============================================
+     SERVICES SECTION - 3PL PROFESSIONAL
+     ============================================ -->
+
 <section class="services-section">
   <!-- Floating Background Shapes -->
   <div class="floating-shapes">
@@ -7,29 +11,42 @@
     <div class="floating-shape shape-4"></div>
   </div>
 
+  <!-- Main Container -->
   <div class="container">
     <!-- Section Header -->
     <div class="section-header">
-      <h2 class="services-title gradient-text">Our Fulfillment Services</h2>
+      <h1 class="services-title">Our Services</h1>
       <p class="section-subtitle">Complete logistics solutions tailored to your business needs</p>
+    </div>
+
+    <!-- Category Filter -->
+    <div class="category-filter">
+      <button 
+        *ngFor="let category of uniqueCategories"
+        class="filter-btn"
+        [class.active]="selectedCategory === category"
+        (click)="filterByCategory(category)"
+      >
+        {{ category === 'all' ? 'All Services' : category }}
+      </button>
     </div>
 
     <!-- Services Grid -->
     <div class="services-grid">
       <div 
-        *ngFor="let service of services" 
+        *ngFor="let service of filteredServices; let i = index"
         class="service-card"
-        [class.active]="activeService === service.id"
         (mouseenter)="onServiceHover(service.id)"
         (mouseleave)="onServiceLeave()"
         (click)="selectService(service.id)"
       >
-        <!-- Card Content Wrapper -->
+        <!-- Card Background Gradient -->
+        <div class="card-gradient"></div>
+
+        <!-- Card Content -->
         <div class="card-content">
           <!-- Icon -->
-          <div class="service-icon">
-            {{ service.icon }}
-          </div>
+          <div class="service-icon">{{ service.icon }}</div>
 
           <!-- Title -->
           <h3 class="service-title">{{ service.title }}</h3>
@@ -37,31 +54,22 @@
           <!-- Description -->
           <p class="service-description">{{ service.description }}</p>
 
-          <!-- Details (shown on active) -->
-          <div class="service-details" *ngIf="activeService === service.id">
-            <div class="details-box">
-              <p class="details-text">{{ service.details }}</p>
-              <div class="detail-accent"></div>
-            </div>
+          <!-- Category Badge -->
+          <div class="service-badge" *ngIf="service.category">
+            {{ service.category }}
           </div>
-
-          <!-- Hover Indicator -->
-          <div class="hover-indicator" *ngIf="hoveredService === service.id"></div>
         </div>
 
-        <!-- Border Animation Element -->
-        <div class="card-border"></div>
-
-        <!-- Gradient Overlay -->
-        <div class="card-gradient"></div>
+        <!-- Hover Indicator -->
+        <div class="hover-indicator" *ngIf="hoveredService === service.id"></div>
       </div>
     </div>
 
     <!-- CTA Section -->
     <div class="services-cta">
-      <h3>Ready to Streamline Your Logistics?</h3>
-      <p>Get started with our fulfillment services today</p>
-      <button class="cta-button" routerLink="/get-a-quote">Get Your Quote</button>
+      <h3>Ready to Transform Your Fulfillment?</h3>
+      <p>Let us handle the complexity of 3PL logistics so you can focus on growing your business.</p>
+      <button class="cta-button">Get Your Quote Today</button>
     </div>
   </div>
 </section>

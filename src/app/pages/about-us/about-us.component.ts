@@ -16,8 +16,8 @@ export class AboutUsComponent implements AfterViewInit {
   whyChooseUs = [
     {
       icon: '🎯',
-      title: 'Expert Team',
-      description: 'Our experienced team has over 50 years of combined fulfillment industry expertise.'
+      title: 'Young Team',
+      description: 'We\'re a small, high-energy team, and we focus on fast communication, flexibility, and making operations easier for the companies we partner with.'
     },
     {
       icon: '🚀',

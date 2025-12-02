@@ -4,6 +4,14 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 declare const gsap: any;
 declare const ScrollTrigger: any;
 
+interface ThreePLService {
+  id: number;
+  icon: string;
+  title: string;
+  description: string;
+  category?: string;
+}
+
 @Component({
   selector: 'app-services',
   standalone: true,
@@ -13,53 +21,141 @@ declare const ScrollTrigger: any;
 })
 export class ServicesComponent implements OnInit, AfterViewInit {
   
-  services = [
+  // All 3PL Services grouped by category
+  services: ThreePLService[] = [
+    // Core Fulfillment
     {
       id: 1,
       icon: '📦',
       title: 'Order Fulfillment',
-      description: 'Expert order fulfillment with guaranteed accuracy. We handle the complete process so you can focus on growing your business.',
-      details: 'Automated order picking, packing, and shipping with real-time tracking'
+      description: 'We receive, store, pick, pack, and ship your orders with guaranteed accuracy.',
+      category: 'Core'
     },
     {
       id: 2,
-      icon: '🚚',
-      title: 'Fast Shipping',
-      description: 'Same-day and 2-day shipping options across the United States. Deliver an "Amazon Prime" experience.',
-      details: 'Multiple carrier options with competitive rates and tracking'
+      icon: '🌐',
+      title: 'Omnichannel Fulfillment',
+      description: 'We fulfill orders from every sales channel all in one place.',
+      category: 'Core'
     },
     {
       id: 3,
-      icon: '📊',
-      title: 'Inventory Management',
-      description: 'Real-time tracking and management with 99.9% accuracy guarantee. Never worry about stock discrepancies.',
-      details: 'Real-time dashboard, automated alerts, and reconciliation'
+      icon: '📦',
+      title: 'Big, Heavy & Bulky Fulfillment',
+      description: 'We specialize in large and heavy items other 3PLs struggle to handle.',
+      category: 'Core'
     },
+
+    // Amazon & E-commerce
     {
       id: 4,
-      icon: '↩️',
-      title: 'Returns Processing',
-      description: 'Streamlined returns processing that maintains customer satisfaction. Fast turnaround to get products back in stock.',
-      details: 'Automated RMA, inspection, restocking, and refund processing'
+      icon: '🛒',
+      title: 'Amazon Fulfillment',
+      description: 'We handle all your Amazon fulfillment needs, including FBA prep, FBM, and Seller Fulfilled Prime.',
+      category: 'Amazon'
     },
     {
       id: 5,
-      icon: '🔗',
-      title: 'Platform Integration',
-      description: 'Connect seamlessly with Shopify, WooCommerce, Amazon, and all major e-commerce platforms.',
-      details: 'Real-time API integration, webhooks, and custom solutions'
+      icon: '📋',
+      title: 'FBA Prep',
+      description: 'We prepare your products for shipment to Amazon\'s fulfillment centers.',
+      category: 'Amazon'
     },
     {
       id: 6,
+      icon: '✨',
+      title: 'Seller Fulfilled Prime',
+      description: 'We enable Prime shipping on oversized items without using Amazon\'s warehouses.',
+      category: 'Amazon'
+    },
+    {
+      id: 7,
+      icon: '🏪',
+      title: 'Shopify Fulfillment',
+      description: 'We integrate with your Shopify store to ensure accurate, timely delivery of all your online orders.',
+      category: 'E-commerce'
+    },
+    {
+      id: 8,
+      icon: '🎬',
+      title: 'TikTok Shop Fulfillment',
+      description: 'We handle the fulfillment demands of viral TikTok success with scalable solutions for sudden order spikes.',
+      category: 'E-commerce'
+    },
+    {
+      id: 9,
+      icon: '🚀',
+      title: 'Kickstarter Fulfillment',
+      description: 'We simplify backer reward logistics, helping you deliver on your campaign promises on time.',
+      category: 'E-commerce'
+    },
+
+    // Specialized Services
+    {
+      id: 10,
+      icon: '🚚',
+      title: 'DTC Fulfillment',
+      description: 'We ship individual parcels directly to consumers.',
+      category: 'Specialized'
+    },
+    {
+      id: 11,
       icon: '🤝',
-      title: 'B2B & D2C Solutions',
-      description: 'Flexible solutions for both direct-to-consumer and business-to-business orders. One fulfillment partner for all.',
-      details: 'Scalable operations for both small batches and bulk orders'
+      title: 'B2B Fulfillment',
+      description: 'We handle your wholesale, retail replenishment, and large-volume orders with precision.',
+      category: 'Specialized'
+    },
+
+    // Planning & Management
+    {
+      id: 12,
+      icon: '📊',
+      title: 'Inventory Planning',
+      description: 'We help you stock the right amounts to reduce carrying costs and prevent stockouts.',
+      category: 'Planning'
+    },
+    {
+      id: 13,
+      icon: '🚛',
+      title: 'Freight Management',
+      description: 'We move your products from port → our warehouses → your B2B customers.',
+      category: 'Planning'
+    },
+
+    // Value-Added Services
+    {
+      id: 14,
+      icon: '↩️',
+      title: 'Returns Management',
+      description: 'We process, inspect, and properly handle returned items according to your guidelines.',
+      category: 'Value-Added'
+    },
+    {
+      id: 15,
+      icon: '⚙️',
+      title: 'Pick and Pack',
+      description: 'We guarantee accuracy when picking and packing your products.',
+      category: 'Value-Added'
+    },
+    {
+      id: 16,
+      icon: '🔗',
+      title: 'Kitting & Assembly',
+      description: 'We combine multiple products into ready-to-ship packages.',
+      category: 'Value-Added'
+    },
+    {
+      id: 17,
+      icon: '📦',
+      title: 'LTL Shipping',
+      description: 'We provide cost-effective freight shipping for your large B2B orders.',
+      category: 'Value-Added'
     }
   ];
 
   activeService: number | null = null;
   hoveredService: number | null = null;
+  selectedCategory: string = 'all';
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
@@ -69,7 +165,6 @@ export class ServicesComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     if (!isPlatformBrowser(this.platformId)) return;
-    
     setTimeout(() => {
       this.initAnimations();
     }, 300);
@@ -85,15 +180,25 @@ export class ServicesComponent implements OnInit, AfterViewInit {
 
   selectService(id: number): void {
     this.activeService = this.activeService === id ? null : id;
-    
-    // Trigger animation for detail reveal
-    if (this.activeService === id) {
-      gsap.fromTo(
-        `.service-detail-${id}`,
-        { opacity: 0, y: 20, scale: 0.95 },
-        { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: 'back.out(1.5)' }
-      );
+  }
+
+  filterByCategory(category: string): void {
+    this.selectedCategory = category;
+    setTimeout(() => {
+      this.initCardAnimations();
+    }, 100);
+  }
+
+  get filteredServices(): ThreePLService[] {
+    if (this.selectedCategory === 'all') {
+      return this.services;
     }
+    return this.services.filter(service => service.category === this.selectedCategory);
+  }
+
+  get uniqueCategories(): string[] {
+    const categories = this.services.map(s => s.category || '');
+    return ['all', ...Array.from(new Set(categories))].filter(c => c);
   }
 
   private initAnimations(): void {
@@ -103,9 +208,7 @@ export class ServicesComponent implements OnInit, AfterViewInit {
 
     gsap.registerPlugin(ScrollTrigger);
 
-    // ========================================
-    // ANIMATION 1: Section Title - Gradient Reveal
-    // ========================================
+    // Title Animation
     gsap.fromTo(
       '.services-title',
       { backgroundPosition: '200% 0%' },
@@ -121,13 +224,10 @@ export class ServicesComponent implements OnInit, AfterViewInit {
       }
     );
 
-    // ========================================
-    // ANIMATION 2: Floating Background Shapes (Parallax)
-    // ========================================
+    // Floating shapes
     const floatingShapes = document.querySelectorAll('.floating-shape');
     floatingShapes.forEach((shape: Element, index: number) => {
       const shapeElement = shape as HTMLElement;
-      
       gsap.to(shapeElement, {
         y: -30 + index * 10,
         rotation: 360 + index * 45,
@@ -137,7 +237,6 @@ export class ServicesComponent implements OnInit, AfterViewInit {
         yoyo: true
       });
 
-      // Mouse parallax effect
       document.addEventListener('mousemove', (e: MouseEvent) => {
         const moveX = (e.clientX / window.innerWidth) * 50 - 25;
         const moveY = (e.clientY / window.innerHeight) * 50 - 25;
@@ -150,9 +249,11 @@ export class ServicesComponent implements OnInit, AfterViewInit {
       });
     });
 
-    // ========================================
-    // ANIMATION 3: Service Cards - Staggered Entrance with Rotation
-    // ========================================
+    this.initCardAnimations();
+    this.initCardHoverEffects();
+  }
+
+  private initCardAnimations(): void {
     gsap.fromTo(
       '.service-card',
       { opacity: 0, y: 50, rotation: -5, scale: 0.8 },
@@ -174,11 +275,11 @@ export class ServicesComponent implements OnInit, AfterViewInit {
         }
       }
     );
+  }
 
-    // ========================================
-    // ANIMATION 4: Service Cards - Hover 3D Tilt Effect
-    // ========================================
+  private initCardHoverEffects(): void {
     const serviceCards = document.querySelectorAll('.service-card');
+
     serviceCards.forEach((card: Element) => {
       const cardElement = card as HTMLElement;
       const cardContent = cardElement.querySelector('.card-content') as HTMLElement;
@@ -187,10 +288,8 @@ export class ServicesComponent implements OnInit, AfterViewInit {
         const rect = cardElement.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
-
         const centerX = rect.width / 2;
         const centerY = rect.height / 2;
-
         const rotateX = (y - centerY) / 10;
         const rotateY = (centerX - x) / 10;
 
@@ -227,15 +326,9 @@ export class ServicesComponent implements OnInit, AfterViewInit {
           });
         }
       });
-    });
 
-    // ========================================
-    // ANIMATION 5: Icon Scale & Bounce on Hover
-    // ========================================
-    serviceCards.forEach((card: Element) => {
-      const cardElement = card as HTMLElement;
+      // Icon hover effect
       const icon = cardElement.querySelector('.service-icon') as HTMLElement;
-      
       if (icon) {
         cardElement.addEventListener('mouseenter', () => {
           gsap.to(icon, {
@@ -244,7 +337,6 @@ export class ServicesComponent implements OnInit, AfterViewInit {
             ease: 'back.out(2)'
           });
 
-          // Bounce effect
           gsap.to(icon, {
             y: -10,
             duration: 0.2,
@@ -263,14 +355,8 @@ export class ServicesComponent implements OnInit, AfterViewInit {
           });
         });
       }
-    });
 
-    // ========================================
-    // ANIMATION 6: Border Glow Animation (on hover)
-    // ========================================
-    serviceCards.forEach((card: Element) => {
-      const cardElement = card as HTMLElement;
-      
+      // Glow effect
       cardElement.addEventListener('mouseenter', () => {
         gsap.to(cardElement, {
           boxShadow: '0 0 30px rgba(0, 212, 255, 0.6), inset 0 0 30px rgba(0, 212, 255, 0.1)',
@@ -285,79 +371,6 @@ export class ServicesComponent implements OnInit, AfterViewInit {
           duration: 0.4,
           ease: 'power2.out'
         });
-      });
-    });
-
-    // ========================================
-    // ANIMATION 7: Gradient Text Animation
-    // ========================================
-    const gradientText = document.querySelector('.services-title') as HTMLElement;
-    if (gradientText) {
-      gsap.to(gradientText, {
-        backgroundPosition: '100% 0%',
-        duration: 3,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut'
-      });
-    }
-
-    // ========================================
-    // ANIMATION 8: Service Details - Slide In & Color Shift
-    // ========================================
-    const observerOptions: IntersectionObserverInit = {
-      threshold: 0.2
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const card = entry.target as HTMLElement;
-          const detailsBox = card.querySelector('.service-details') as HTMLElement;
-          
-          if (detailsBox) {
-            gsap.fromTo(
-              detailsBox,
-              { x: -30, opacity: 0 },
-              { x: 0, opacity: 1, duration: 0.6, ease: 'power2.out', delay: 0.1 }
-            );
-          }
-          observer.unobserve(card);
-        }
-      });
-    }, observerOptions);
-
-    serviceCards.forEach((card) => observer.observe(card));
-
-    // ========================================
-    // ANIMATION 9: Background Gradient Shift on Scroll
-    // ========================================
-    const servicesSection = document.querySelector('.services-section') as HTMLElement;
-    if (servicesSection) {
-      gsap.to(servicesSection, {
-        backgroundPosition: '100% 100%',
-        duration: 20,
-        repeat: -1,
-        yoyo: true,
-        ease: 'none'
-      });
-    }
-
-    // ========================================
-    // ANIMATION 10: Cards Parallax on Scroll
-    // ========================================
-    const cardElements = document.querySelectorAll('.service-card');
-    cardElements.forEach((cardElement: Element, index: number) => {
-      const card = cardElement as HTMLElement;
-      gsap.to(card, {
-        y: index % 2 === 0 ? 30 : -30,
-        scrollTrigger: {
-          trigger: card,
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: 1,
-          markers: false
-        }
       });
     });
   }

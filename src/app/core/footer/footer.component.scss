@@ -1,16 +1,19 @@
 .footer {
-  background: rgba(10, 10, 10, 0.95);
-  border-top: 1px solid rgba(0, 212, 255, 0.1);
-  color: rgba(255, 255, 255, 0.7);
-  padding: 80px 50px 30px;
-  margin-top: 100px;
+  background: var(--surface);
+  border-top: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  padding: 60px 50px 24px;
+  margin-top: 80px;
+  box-shadow: 0 -6px 24px rgba(15, 23, 42, 0.06);
 
   @media (max-width: 968px) {
-    padding: 60px 30px 20px;
+    padding: 50px 30px 20px;
+    margin-top: 60px;
   }
 
   @media (max-width: 600px) {
-    padding: 40px 20px 15px;
+    padding: 40px 20px 16px;
+    margin-top: 50px;
   }
 }
 
@@ -22,51 +25,54 @@
 .footer-top {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 60px;
-  margin-bottom: 60px;
+  gap: 48px;
+  margin-bottom: 48px;
 
   @media (max-width: 968px) {
     grid-template-columns: repeat(2, 1fr);
-    gap: 40px;
+    gap: 32px;
   }
 
   @media (max-width: 600px) {
     grid-template-columns: 1fr;
-    gap: 30px;
+    gap: 24px;
   }
 }
 
 .footer-col {
   h4 {
-    font-size: 1.1rem;
-    margin-bottom: 20px;
-    color: var(--light);
+    font-size: 1.05rem;
+    margin-bottom: 16px;
+    color: var(--text-primary);
     font-family: 'Montserrat', sans-serif;
   }
 
   p {
     font-size: 0.9rem;
     line-height: 1.8;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
+    color: var(--text-muted);
   }
 
   ul {
     list-style: none;
     padding: 0;
+    margin: 0;
   }
 
   li {
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 
     a {
-      color: rgba(255, 255, 255, 0.6);
+      color: var(--text-muted);
       font-size: 0.9rem;
-      transition: all 0.3s ease;
+      transition: all 0.25s ease;
       display: inline-block;
+      text-decoration: none;
 
       &:hover {
         color: var(--primary);
-        transform: translateX(5px);
+        transform: translateX(4px);
       }
     }
   }
@@ -74,50 +80,57 @@
 
 .social-links {
   display: flex;
-  gap: 15px;
-  margin-top: 15px;
+  gap: 12px;
+  margin-top: 14px;
 }
 
 .social-icon {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 212, 255, 0.1);
-  border-radius: 50%;
+  background: #eef3ff;
+  border-radius: 999px;
   color: var(--primary);
-  transition: all 0.3s ease;
-  font-weight: bold;
+  transition: all 0.25s ease;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border: 1px solid var(--border-subtle);
 
   &:hover {
-    background: var(--primary);
-    color: var(--dark);
-    transform: scale(1.1);
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: #ffffff;
+    border-color: transparent;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.3);
   }
 }
 
 .footer-contact {
   li {
     display: flex;
-    gap: 12px;
-    margin-bottom: 20px;
+    gap: 10px;
+    margin-bottom: 16px;
 
     .contact-icon {
-      font-size: 1.5rem;
+      font-size: 1.2rem;
       flex-shrink: 0;
-      margin-top: 5px;
+      margin-top: 2px;
+      color: var(--primary);
     }
 
     .label {
       font-weight: 600;
-      color: var(--light);
-      margin-bottom: 3px;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+      font-size: 0.9rem;
     }
 
     p {
       margin: 0;
       font-size: 0.85rem;
+      color: var(--text-muted);
     }
   }
 }
@@ -126,14 +139,14 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 30px;
-  border-top: 1px solid rgba(0, 212, 255, 0.1);
-  color: rgba(255, 255, 255, 0.5);
+  padding-top: 20px;
+  border-top: 1px solid var(--border-subtle);
+  color: var(--text-muted);
   font-size: 0.85rem;
 
   @media (max-width: 600px) {
     flex-direction: column;
-    gap: 20px;
+    gap: 16px;
     text-align: center;
   }
 }
@@ -144,17 +157,17 @@
 
 .footer-bottom-links {
   display: flex;
-  gap: 30px;
+  gap: 24px;
 
   @media (max-width: 600px) {
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
   }
 
   a {
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--text-muted);
     text-decoration: none;
-    transition: color 0.3s ease;
+    transition: color 0.25s ease;
 
     &:hover {
       color: var(--primary);
