@@ -110,9 +110,10 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       new Typed(typedTextEl, {
         strings: [
           'Fulfillment Excellence',
-          'Reliable Warehouse Solutions',
+          // 'Reliable Warehouse Solutions',
           'Amazon Prime-Like Experience',
-          'Growing Your Business'
+          'Logistics Manage all Over US'
+          // 'Growing Your Business'
         ],
         typeSpeed: 60,
         backSpeed: 40,

@@ -6,15 +6,15 @@
 // *** COLOR VARIABLES ***
 
 :root {
-  --primary: #22c1a9;        /* Mint-teal (buttons, highlights) */
-  --secondary: #60a5fa;      /* Soft sky blue (accents) */
-  --accent: #ffd166;         /* Warm lemon (micro accents) */
+  --bg: #ffffff;
+  --surface: #f7fbff;
+  --primary: #00A8FF;
+  --secondary: #004A8F;
+  --accent: #4DC3FF;
+  --text-primary: #0B0B0B;
+  --text-muted: #6b7280;
+  --border-subtle: #e2e8f0;
 
-  --bg: #f7fbff;             /* Page background (very light) */
-  --surface: #ffffff;        /* Cards / panels */
-  --text-primary: #0f1724;   /* Dark slate for main text */
-  --text-muted: #6b7280;     /* Secondary text */
-  --border-subtle: #e6eefc;  /* Light border / subtle divider */
 
   --success: #16a34a;
   --error: #dc2626;

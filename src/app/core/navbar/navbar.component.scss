@@ -1,5 +1,5 @@
 /* ============================
-   NAVBAR – LIGHT THEME
+   NAVBAR – BLUE LOGO THEME
    ============================ */
 
 .navbar {
@@ -12,13 +12,8 @@
   border-bottom: 1px solid var(--border-subtle);
   z-index: 1000;
 
-  @media (max-width: 968px) {
-    padding: 14px 30px;
-  }
-
-  @media (max-width: 600px) {
-    padding: 12px 20px;
-  }
+  @media (max-width: 968px) { padding: 14px 30px; }
+  @media (max-width: 600px)  { padding: 12px 20px; }
 }
 
 /* container that centers content and gives space */
@@ -137,12 +132,12 @@
   transition: transform 0.25s ease, box-shadow 0.25s ease;
   font-size: 0.95rem;
   flex: 0 0 auto;
-  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.25);
+  box-shadow: 0 6px 20px rgba(0, 168, 255, 0.25);
 }
 
 .cta-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(37, 99, 235, 0.32);
+  box-shadow: 0 10px 30px rgba(0, 168, 255, 0.32);
 }
 
 /* -------------------------
@@ -150,10 +145,7 @@
    ------------------------- */
 @media (max-width: 768px) {
   /* show hamburger */
-  .menu-toggle {
-    display: flex;
-    z-index: 1001;
-  }
+  .menu-toggle { display: flex; z-index: 1001; }
 
   /* slide-in panel for links – light version */
   .nav-links {
@@ -173,13 +165,9 @@
     box-shadow: -10px 0 30px rgba(15, 23, 42, 0.15);
   }
 
-  .nav-links.active {
-    right: 0;
-  }
+  .nav-links.active { right: 0; }
 
-  .nav-links li {
-    margin-bottom: 8px;
-  }
+  .nav-links li { margin-bottom: 8px; }
 
   .nav-link {
     font-size: 1.05rem;
@@ -188,14 +176,13 @@
     color: var(--text-primary);
   }
 
-  .nav-link::after {
-    bottom: 0;
-  }
+  .nav-link::after { bottom: 0; }
 
   /* CTA – slightly smaller on mobile */
   .cta-btn {
     margin-left: 8px;
     padding: 9px 22px;
     font-size: 0.9rem;
+    box-shadow: 0 6px 18px rgba(0, 168, 255, 0.22);
   }
 }
