@@ -23,6 +23,10 @@ declare const ScrollTrigger: any;
 export class GuaranteeComponent implements OnInit, AfterViewInit {
   @ViewChild('detailRight') detailRight!: ElementRef;
 
+  scrollToTop(): void {
+    setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 50);
+  }
+
   selectedGuarantee: number = 0;
 
   guarantees = [

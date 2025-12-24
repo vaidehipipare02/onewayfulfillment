@@ -46,7 +46,7 @@ scrollToTop(): void {
     { icon: '📍', text: '1543 Columbia Ave, Franklin TN 37064', href: '', label: 'Address' }
   ];
 
-    scrollToTop() {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    // scrollToTop() {
+    //   window.scrollTo({ top: 0, behavior: 'smooth' });
+    // }
 }

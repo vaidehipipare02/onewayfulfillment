@@ -181,6 +181,10 @@ export class GetAQuoteComponent {
       );
   }
 
+  scrollToTop(): void {
+    setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 50);
+  }
+
   downloadPdf(): void {
     const doc = new (jsPDF as any)();
     const formValue = this.form.value;
