@@ -67,7 +67,12 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     if (!isPlatformBrowser(this.platformId)) return;
     setTimeout(() => this.initAll(), 200);
+     requestAnimationFrame(() => {
+    // small safety timeout to allow webfonts/images to settle on slower devices
+    setTimeout(() => this.initAll(), 50);
+  });
   }
+  
 
   scrollToServices(): void {
     document.querySelector('#services')?.scrollIntoView({ behavior: 'smooth' });
@@ -556,16 +561,21 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     const cards = document.querySelectorAll('.service-card');
     if (!cards.length) return;
 
-    gsap.to(cards, {
-      opacity: 0.3,
-      duration: 1,
-      scrollTrigger: {
-        trigger: '.services-preview',
-        start: 'top 70%',
-        onEnter: () => this.updateCarousel()
-      }
+    ScrollTrigger.create({
+    trigger: '.services-preview',
+    start: 'top 70%',
+    onEnter: () => {
+      cards.forEach((c: Element) => c.classList.add('visible'));
+      // ensure carousel positions are recalculated when visible
+      this.updateCarousel();
+    },
+    onLeaveBack: () => {
+      cards.forEach((c: Element) => c.classList.remove('visible'));
+    }
     });
+    
   }
+
 
   private initSmoothScroll(): void {
     const anchors = document.querySelectorAll('a[href^="#"]');

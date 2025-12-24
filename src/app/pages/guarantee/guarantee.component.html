@@ -47,7 +47,7 @@
             class="guarantee-card"
             [class.active]="selectedGuarantee === i"
             [style.--accent-color]="guarantee.color"
-            (click)="selectGuarantee(i)"
+            (click)="selectGuarantee(i)" 
           >
             <div class="card-icon">{{ guarantee.icon }}</div>
             <h3>{{ guarantee.title }}</h3>
@@ -57,7 +57,7 @@
         </div>
 
         <!-- Guarantee Detail (Right) -->
-        <div class="guarantee-detail">
+        <div class="guarantee-detail" #detailRight>
           <div class="detail-card" *ngIf="guarantees[selectedGuarantee]">
             <div class="detail-header" [style.borderColor]="guarantees[selectedGuarantee].color">
               <div class="detail-icon">{{ guarantees[selectedGuarantee].icon }}</div>

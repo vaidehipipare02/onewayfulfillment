@@ -26,6 +26,10 @@ services = [
   { id: 4, label: 'Amazon Fulfillment', path: '/services/amazon-fulfillment' },
   { id: 6, label: 'Seller Fulfilled Prime', path: '/services/seller-fulfilled-prime' }
 ];
+scrollToTop(): void {
+    // small timeout lets the router start navigating first
+    setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 50);
+  }
 
   company = [
     'About Us',
