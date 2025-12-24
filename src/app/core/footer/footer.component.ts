@@ -16,15 +16,15 @@ export class FooterComponent {
     { label: 'Home', path: '/' },
     { label: 'Services', path: '/services' },
     { label: 'About Us', path: '/about-us' },
-    { label: 'Contact', path: '/get-a-quote' }
+    // { label: 'Contact', path: '/get-a-quote' }
   ];
 
- services = [
-  { id: 1, label: 'Order Fulfillment' },
-  { id: 2, label: 'Omnichannel Fulfillment' },
-  { id: 3, label: 'Big, Heavy & Bulky Fulfillment' },
-  { id: 4, label: 'Amazon Fulfillment' },
-  { id: 6, label: 'Seller Fulfilled Prime' }
+services = [
+  { id: 1, label: 'Order Fulfillment', path: '/services/order-fulfillment' },
+  { id: 2, label: 'Omnichannel Fulfillment', path: '/services/omnichannel-fulfillment' },
+  { id: 3, label: 'Kickstarter Fulfillment', path: '/services/kickstarter-fulfillment' },
+  { id: 4, label: 'Amazon Fulfillment', path: '/services/amazon-fulfillment' },
+  { id: 6, label: 'Seller Fulfilled Prime', path: '/services/seller-fulfilled-prime' }
 ];
 
   company = [
@@ -41,4 +41,8 @@ export class FooterComponent {
     { icon: '📞', text: '(410) 736-2327', href: '+14107362327', label: 'Phone' },
     { icon: '📍', text: '1543 Columbia Ave, Franklin TN 37064', href: '', label: 'Address' }
   ];
+
+    scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 }

@@ -31,7 +31,7 @@ export class ServicesComponent implements OnInit, AfterViewInit {
   services: ThreePLService[] = [
     { id: 1, icon: '📦', title: 'Order Fulfillment', description: 'We receive, store, pick, pack, and ship your orders with guaranteed accuracy.', category: 'Core' },
     { id: 2, icon: '🌐', title: 'Omnichannel Fulfillment', description: 'We fulfill orders from every sales channel all in one place.', category: 'Core' },
-    { id: 3, icon: '📦', title: 'Big, Heavy & Bulky Fulfillment', description: 'We specialize in large and heavy items other 3PLs struggle to handle.', category: 'Core' },
+    // { id: 3, icon: '📦', title: 'Big, Heavy & Bulky Fulfillment', description: 'We specialize in large and heavy items other 3PLs struggle to handle.', category: 'Core' },
 
     { id: 4, icon: '🛒', title: 'Amazon Fulfillment', description: 'We handle all your Amazon fulfillment needs including FBA prep, FBM, and SFP.', category: 'Amazon' },
     { id: 5, icon: '📋', title: 'FBA Prep', description: 'We prepare your products for shipment to Amazon fulfillment centers.', category: 'Amazon' },
