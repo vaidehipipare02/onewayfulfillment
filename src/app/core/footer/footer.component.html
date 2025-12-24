@@ -13,7 +13,7 @@
         <h4>Quick Links</h4>
         <ul>
           <li *ngFor="let link of quickLinks">
-            <a [routerLink]="link.path">{{ link.label }}</a>
+            <a [routerLink]="link.path" (click)="scrollToTop()">{{ link.label }}</a>
           </li>
         </ul>
       </div>

@@ -26,6 +26,10 @@ export class FooterComponent {
   { id: 4, label: 'Amazon Fulfillment' },
   { id: 6, label: 'Seller Fulfilled Prime' }
 ];
+scrollToTop(): void {
+    // small timeout lets the router start navigating first
+    setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 50);
+  }
 
   company = [
     'About Us',
