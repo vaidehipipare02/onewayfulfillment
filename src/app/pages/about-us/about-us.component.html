@@ -12,8 +12,16 @@
     <div class="container">
       <div class="about-content">
         <h2 class="gradient-text">Our Story</h2>
-        <p>Founded with a modern, technology-first mindset, One Way Fulfillment is built by a team of driven professionals under 30 who understand the speed and precision today’s ecommerce brands demand. We combine logistics expertise with smart automation to deliver fast, reliable, and scalable fulfillment.</p>
-        <p>What started as a bold idea to simplify ecommerce operations has grown into a trusted fulfillment partner for brands across the United States and World. Our mission is simple: remove friction from fulfillment so brands can focus on growth, customer experience, and scaling with confidence.</p>
+        <p>
+          Founded with a modern, technology-first mindset, One Way Fulfillment is built by a team of driven
+          professionals under 30 who understand the speed and precision today's ecommerce brands demand.
+          We combine logistics expertise with smart automation to deliver fast, reliable, and scalable fulfillment.
+        </p>
+        <p>
+          What started as a bold idea to simplify ecommerce operations has grown into a trusted fulfillment
+          partner for brands across the United States and World. Our mission is simple: remove friction from
+          fulfillment so brands can focus on growth, customer experience, and scaling with confidence.
+        </p>
       </div>
     </div>
   </section>
@@ -21,7 +29,7 @@
   <!-- Why Choose Us Section -->
   <section class="why-section">
     <div class="container">
-      <h2 class="gradient-text" style="text-align: center; margin-bottom: 60px;">Why Choose Us?</h2>
+      <h2 class="gradient-text">Why Choose Us?</h2>
       <div class="why-grid">
         <div *ngFor="let item of whyChooseUs" class="why-card">
           <div class="icon">{{ item.icon }}</div>
@@ -34,51 +42,41 @@
 
 
 
-  <!-- Team Section
-  <section class="team-section">
+  <!-- Testimonials Section -->
+  <section class="testimonials-section">
     <div class="container">
-      <h2 class="gradient-text" style="text-align: center; margin-bottom: 60px;">Our Team</h2>
-      <div class="team-grid">
-        <div *ngFor="let member of teamMembers" class="team-card">
-          <div class="team-avatar">{{ member.name.charAt(0) }}</div>
-          <h3>{{ member.name }}</h3>
-          <p class="role">{{ member.role }}</p>
-          <p class="bio">{{ member.bio }}</p>
+      <h2 class="gradient-text">What Our Clients Say</h2>
+      <div class="testimonials-grid">
+        <div *ngFor="let testimonial of testimonials; let i = index" class="testimonial-card">
+          <!-- Quote First -->
+          <div class="testimonial-quote">
+            {{ getDisplayText(testimonial.fullQuote, testimonial.expanded) }}
+          </div>
+
+          <!-- Read More Button -->
+          <button 
+            class="read-more-btn" 
+            *ngIf="testimonial.fullQuote.length > 150"
+            (click)="toggleExpand(i)">
+            {{ testimonial.expanded ? 'Read Less' : 'Read More' }}
+          </button>
+
+          <!-- Author Info at Bottom -->
+          <div class="testimonial-author">
+            <span class="testimonial-avatar">
+              {{ testimonial.author.charAt(0) }}
+            </span>
+            <div class="author-info">
+              <div class="testimonial-name">
+                {{ testimonial.author }}
+              </div>
+              <div class="testimonial-role" *ngIf="testimonial.role">
+                {{ testimonial.role }}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </section> -->
-
-  <!-- Stats Section -->
-  <!-- <section class="about-stats">
-    <div class="container">
-      <div class="stats-grid">
-        <div class="stat">
-          <h3 class="gradient-text">10+</h3>
-          <p>Years in Business</p>
-        </div>
-        <div class="stat">
-          <h3 class="gradient-text">5000+</h3>
-          <p>Happy Clients</p>
-        </div>
-        <div class="stat">
-          <h3 class="gradient-text">50M+</h3>
-          <p>Orders Fulfilled</p>
-        </div>
-        <div class="stat">
-          <h3 class="gradient-text">99.9%</h3>
-          <p>Accuracy Rate</p>
-        </div>
-      </div>
-    </div>
-  </section> -->
-
-  <!-- CTA Section -->
-  <!-- <section class="about-cta">
-    <div class="container">
-      <h2 class="gradient-text">Join Our Growing List of Satisfied Partners</h2>
-      <p>Let's work together to achieve your fulfillment goals.</p>
-      <a routerLink="/get-a-quote" class="primary-btn">Get Started Today</a>
-    </div>
-  </section> -->
+  </section>
 </div>

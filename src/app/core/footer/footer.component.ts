@@ -19,13 +19,13 @@ export class FooterComponent {
     { label: 'Contact', path: '/get-a-quote' }
   ];
 
-  services = [
-    'Order Fulfillment',
-    'Omnichannel Fulfillment',
-    'Big, Heavy & Bulky Fulfillment',
-    'Amazon Fulfillment',
-    'Seller Fulfilled Prime'
-  ];
+ services = [
+  { id: 1, label: 'Order Fulfillment' },
+  { id: 2, label: 'Omnichannel Fulfillment' },
+  { id: 3, label: 'Big, Heavy & Bulky Fulfillment' },
+  { id: 4, label: 'Amazon Fulfillment' },
+  { id: 6, label: 'Seller Fulfilled Prime' }
+];
 
   company = [
     'About Us',
