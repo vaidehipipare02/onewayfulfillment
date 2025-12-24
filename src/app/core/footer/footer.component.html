@@ -6,12 +6,6 @@
       <div class="footer-col">
         <h4>About Us</h4>
         <p>ONE WAY FULFILLMENT provides world-class warehouse and fulfillment solutions for growing e-commerce businesses.</p>
-        <!-- <div class="social-links">
-          <a href="#" class="social-icon">f</a>
-          <a href="#" class="social-icon">t</a>
-          <a href="#" class="social-icon">in</a>
-          <a href="#" class="social-icon">ig</a>
-        </div> -->
       </div>
 
       <!-- Column 2: Quick Links -->
@@ -39,10 +33,25 @@
         <h4>Contact Info</h4>
         <ul>
           <li *ngFor="let item of contact">
-            <span class="contact-icon">{{ item.icon }}</span>
-            <div>
+            <span class="contact-icon" aria-hidden="true">{{ item.icon }}</span>
+            <div class="contact-details">
               <p class="label">{{ item.label }}</p>
-              <p>{{ item.text }}</p>
+              <p class="value">
+                <!-- Email clickable -->
+                <a *ngIf="item.label === 'Email'" [href]="'mailto:' + item.href">
+                  {{ item.text }}
+                </a>
+
+                <!-- Phone clickable -->
+                <a *ngIf="item.label === 'Phone'" [href]="'tel:' + item.href">
+                  {{ item.text }}
+                </a>
+
+                <!-- Default (address or anything else) -->
+                <span *ngIf="item.label !== 'Email' && item.label !== 'Phone'">
+                  {{ item.text }}
+                </span>
+              </p>
             </div>
           </li>
         </ul>
@@ -54,11 +63,6 @@
       <div class="copyright">
         © {{ currentYear }} ONE WAY FULFILLMENT. All rights reserved.
       </div>
-      <!-- <div class="footer-bottom-links">
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms of Service</a>
-        <a href="#">Cookie Policy</a>
-      </div> -->
     </div>
   </div>
 </footer>

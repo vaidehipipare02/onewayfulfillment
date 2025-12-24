@@ -7,6 +7,9 @@
     "build": "ng build",
     "serve": "ng serve --open",
     "lint": "ng lint"
+    ,
+    "build:ssr": "ng build && ng run warehouse-site:server",
+    "serve:ssr": "node dist/warehouse-site/server/main.js"
   },
   "private": true,
   "dependencies": {

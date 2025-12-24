@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-footer',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterModule],
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss']
 })
@@ -35,9 +35,10 @@ export class FooterComponent {
     'Partner Program'
   ];
 
+  // note: 'text' is what displays; 'href' is used for mailto: / tel:
   contact = [
-    { icon: '📧', text: 'wgardner@onewayfulfillment.com', label: 'Email' },
-    { icon: '📞', text: '+1 (410) 736-2327', label: 'Phone' },
-    { icon: '📍', text: '1543 Columbia Ave Franklin TN 37064', label: 'Address' }
+    { icon: '📧', text: 'wgardner@onewayfulfillment.com', href: 'wgardner@onewayfulfillment.com', label: 'Email' },
+    { icon: '📞', text: '(410) 736-2327', href: '+14107362327', label: 'Phone' },
+    { icon: '📍', text: '1543 Columbia Ave, Franklin TN 37064', href: '', label: 'Address' }
   ];
 }

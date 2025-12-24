@@ -13,73 +13,65 @@ gsap.registerPlugin(ScrollTrigger);
   styleUrls: ['./about-us.component.scss']
 })
 export class AboutUsComponent implements AfterViewInit {
+
   whyChooseUs = [
     {
       icon: '🎯',
       title: 'Young Team',
-      description: 'We\'re a small, high-energy team, and we focus on fast communication, flexibility, and making operations easier for the companies we partner with.'
+      description: 'Small, energetic team focused on speed and flexibility.'
     },
     {
       icon: '🚀',
       title: 'Cutting-Edge Technology',
-      description: 'We use the latest warehouse management systems and automation technology.'
+      description: 'Modern warehouse systems and automation.'
     },
     {
       icon: '📊',
       title: 'Real-Time Tracking',
-      description: 'Track your inventory and orders in real-time with our advanced system.'
+      description: 'Live inventory and order tracking.'
     },
     {
       icon: '🛡️',
       title: 'Reliability',
-      description: '99.9% accuracy guarantee with 24/7 customer support and monitoring.'
+      description: '99.9% accuracy with 24/7 monitoring.'
     },
     {
       icon: '💰',
       title: 'Cost Effective',
-      description: 'Competitive pricing with no hidden fees. Flexible plans to fit any budget.'
+      description: 'Optimized operations to reduce fulfillment costs.'
     },
-    {
+     {
       icon: '🌍',
       title: 'Scalable Solutions',
       description: 'Grow with confidence - our systems scale with your business needs.'
     }
   ];
 
-  teamMembers = [
+  testimonials = [
     {
-      name: 'Sarah Johnson',
-      role: 'Founder & CEO',
-      bio: 'Industry veteran with 20+ years of fulfillment experience.'
+      quote: 'Partnering with One Way Fulfillment has taken a huge weight off our shoulders. They manage all of our inventory and order shipping with precision, and their in-house freight team has saved us real money on inbound deliveries. Everything arrives organized, packed clean, and out the door fast. Thanks One way!!',
+      author: 'Vigilante Team',
+      // role: 'Founder, Trendy Threads'
     },
     {
-      name: 'Michael Chen',
-      role: 'Chief Operations Officer',
-      bio: 'Expert in warehouse automation and logistics optimization.'
+      author: 'John Marquez',
+      quote: 'Can’t say enough great things about One Way Fulfillment. They’ve been a huge asset to our operations at Bridger Design + Build. They not only handle our freight and logistics efficiently, but they also store materials for us and receive packages for our build team daily. This has streamlined our job site logistics and has saved us countless hours. Highly recommend their services to any construction company looking to stay organized and operate more efficiently.',
+      // author: 'John Marquez',
+      // role: 'Bridger Design + Build'
     },
     {
-      name: 'Emily Rodriguez',
-      role: 'Head of Technology',
-      bio: 'Tech innovator focused on building scalable fulfillment solutions.'
-    },
-    {
-      name: 'David Williams',
-      role: 'Customer Success Director',
-      bio: 'Dedicated to ensuring every client achieves their business goals.'
+      quote: 'One Way Fulfillment has been a game changer for Honey Golf. Their communication is fast, their systems are organized, and they’ve handled every order with care and accuracy. Inventory is always updated, orders go out on time, and they’ve made scaling a lot less stressful for us. Highly recommend to any growing brand looking for a reliable fulfillment partner',
+      author: 'Patrick Warren',
+      // role: 'Honey Golf'
     }
   ];
-
-  constructor() {}
 
   ngAfterViewInit(): void {
     this.initAboutAnimations();
   }
 
-  /**
-   * Animate about page elements on scroll
-   */
   private initAboutAnimations(): void {
-    // Animate why choose us cards
+
     const cards = document.querySelectorAll('.why-card');
     cards.forEach((card, index) => {
       gsap.fromTo(
@@ -94,15 +86,13 @@ export class AboutUsComponent implements AfterViewInit {
             trigger: card,
             start: 'top 85%',
             once: true
-          },
-          ease: 'back.out'
+          }
         }
       );
     });
 
-    // Animate team members
-    const teamCards = document.querySelectorAll('.team-card');
-    teamCards.forEach((card, index) => {
+    const testimonialCards = document.querySelectorAll('.testimonial-card');
+    testimonialCards.forEach((card, index) => {
       gsap.fromTo(
         card,
         { opacity: 0, scale: 0.8 },
@@ -115,8 +105,7 @@ export class AboutUsComponent implements AfterViewInit {
             trigger: card,
             start: 'top 85%',
             once: true
-          },
-          ease: 'elastic.out(1, 0.5)'
+          }
         }
       );
     });

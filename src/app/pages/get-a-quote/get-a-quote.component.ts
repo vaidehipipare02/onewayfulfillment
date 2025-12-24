@@ -23,9 +23,9 @@ export class GetAQuoteComponent {
   reference = '';
   form: FormGroup;
 
-  private EMAILJS_SERVICE_ID = 'service_vaidehi';
-  private EMAILJS_TEMPLATE_ID = 'template_vaidehi';
-  private EMAILJS_PUBLIC_KEY = '02JfGRfCYO5T09nS7';
+  private EMAILJS_SERVICE_ID = 'service_soham';
+  private EMAILJS_TEMPLATE_ID = 'template_soham';
+  private EMAILJS_PUBLIC_KEY = 'Vh01Ag6el60JdXgRr';
 
   constructor(private fb: FormBuilder) {
     emailjs.init(this.EMAILJS_PUBLIC_KEY);
