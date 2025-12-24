@@ -28,9 +28,15 @@
       <div class="footer-col">
         <h4>Services</h4>
         <ul>
-          <li *ngFor="let service of services">
-            <a href="#">{{ service }}</a>
-          </li>
+         <li *ngFor="let service of services">
+  <a
+    [routerLink]="['/services']"
+    [fragment]="'service-' + service.id"
+  >
+    {{ service.label }}
+  </a>
+</li>
+
         </ul>
       </div>
 

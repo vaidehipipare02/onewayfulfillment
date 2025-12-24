@@ -80,7 +80,7 @@
 /* nav links centered between logo & CTA on desktop */
 .nav-links {
   display: flex;
-  gap: 40px;
+  gap: 60px;
   list-style: none;
   justify-content: center;
   align-items: center;
@@ -94,8 +94,8 @@
   position: relative;
   color: var(--text-primary);
   text-decoration: none;
-  font-size: 0.98rem;
-  font-weight: 500;
+  font-size: 0.99rem;
+  font-weight: 700;
   transition: color 0.25s ease;
   padding-bottom: 5px;
 }

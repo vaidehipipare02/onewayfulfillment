@@ -9,12 +9,10 @@ import {
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
-
 declare const gsap: any;
 declare const ScrollTrigger: any;
 declare const Typed: any;
 declare const THREE: any;
-
 
 @Component({
   selector: 'app-home',
@@ -28,51 +26,66 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   private scene: any = null;
   private camera: any = null;
   private renderer: any = null;
-  private boxes: any[] = [];
-  private fallingBoxes: any[] = [];
+
+  // pools + resources
+  private boxGeometry: any;
+  private tapeGeometry: any;
+  private labelGeometry: any;
+  private barcodeGeometry: any;
+  private edgesGeometry: any;
+
+  private boxMaterials: any[] = [];
+  private tapeMaterial: any;
+  private labelMaterial: any;
+  private barcodeMaterial: any;
+  private edgesMaterial: any;
+
+  private boxPool: any[] = [];         // pooled (inactive) boxes
+  public fallingBoxes: any[] = [];     // active boxes in scene
+
+  private initialPoolSize = 60;        // create once at init (tune)
+  private maxActiveBoxes = 40;         // cap active boxes (tune)
+  private spawnIntervalId: any = null;
+
   private animationFrameId: any = null;
   private isAnimating = false;
-  private boxCreateInterval: any = null;
-  private totalBoxesCreated = 0;
-  private maxBoxes = 25;
 
+  // Legacy arrays kept for compatibility
+  private boxes: any[] = [];           // older code used this; we'll keep in sync
 
   // Carousel
   private carouselCards: HTMLElement[] = [];
   private currentIndex = 0;
   private carouselAutoRotate: any = null;
 
-
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
-
 
   ngOnInit(): void {
     // nothing for now
   }
-
 
   ngAfterViewInit(): void {
     if (!isPlatformBrowser(this.platformId)) return;
     setTimeout(() => this.initAll(), 200);
   }
 
-
   scrollToServices(): void {
     document.querySelector('#services')?.scrollIntoView({ behavior: 'smooth' });
   }
-
 
   private initAll(): void {
     if (typeof ScrollTrigger !== 'undefined' && typeof gsap !== 'undefined') {
       gsap.registerPlugin(ScrollTrigger);
     }
 
-
     this.initHeroAnimations();
     this.initTypedText();
     this.initFloatingBoxes();
     this.initStatsAnimation();
+
+    // THREE init
     this.initFallingBoxes();
+
     this.initCarousel();
     this.initServicesTrigger();
     this.initSmoothScroll();
@@ -80,13 +93,11 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.initQuoteInteractions();
   }
 
-
   private initHeroAnimations(): void {
     if (typeof gsap === 'undefined') return;
     const heroTitle = document.querySelector('.hero h1');
     const heroText = document.querySelector('.hero p');
     const heroButtons = document.querySelector('.hero-buttons');
-
 
     if (heroTitle) {
       gsap.to(heroTitle, { opacity: 1, y: 0, duration: 1, delay: 0.5, ease: 'power3.out' });
@@ -99,7 +110,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-
   private initTypedText(): void {
     if (typeof Typed === 'undefined') return;
 
@@ -110,10 +120,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       new Typed(typedTextEl, {
         strings: [
           'Fulfillment Excellence',
-          // 'Reliable Warehouse Solutions',
-          'Amazon Prime-Like Experience',
+          
           'Logistics Manage all Over US'
-          // 'Growing Your Business'
         ],
         typeSpeed: 60,
         backSpeed: 40,
@@ -135,7 +143,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-
   private initFloatingBoxes(): void {
     if (typeof gsap === 'undefined') return;
     const boxes = document.querySelectorAll('.floating-box');
@@ -151,7 +158,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       });
     });
   }
-
 
   private initStatsAnimation(): void {
     if (typeof gsap === 'undefined') return;
@@ -172,9 +178,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-
   // ---------------------------
-  // THREE.JS: Falling Boxes - CONTINUOUS STREAM
+  // THREE.JS: Falling Boxes - Pooling + Controlled Spawn
   // ---------------------------
   private initFallingBoxes(): void {
     if (typeof THREE === 'undefined') {
@@ -207,117 +212,176 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     directional.position.set(3, 5, 2);
     this.scene.add(directional);
 
-    // Start animation loop FIRST
-    this.isAnimating = true;
-    this.animate();
+    // Create shared resources and pool
+    this.initBoxResourcesAndPool();
 
-    // Then START creating boxes at intervals (continuous stream)
-    this.startBoxStream();
+    // Start animation loop (guarded)
+    this.startAnimation();
+
+    // Start spawning (rate-limited)
+    this.startSpawning();
 
     window.addEventListener('resize', () => this.onWindowResize(container));
   }
 
+  // create shared geometries/materials and pre-populate pool
+  private initBoxResourcesAndPool(): void {
+    // Shared geometries
+    this.boxGeometry = new THREE.BoxGeometry(0.8, 0.8, 0.8);
+    this.tapeGeometry = new THREE.BoxGeometry(0.82, 0.05, 0.05);
+    this.labelGeometry = new THREE.PlaneGeometry(0.4, 0.25);
+    this.barcodeGeometry = new THREE.PlaneGeometry(0.3, 0.08);
+    this.edgesGeometry = new THREE.EdgesGeometry(this.boxGeometry);
 
-  // ✨ NEW: Stream boxes continuously instead of batch-creating
-  private startBoxStream(): void {
-    // Create first box immediately
-    this.createAndAddBox();
-
-    // Then create new boxes every 300ms (adjust this value for desired frequency)
-    // Lower = faster stream, Higher = slower stream
-    this.boxCreateInterval = setInterval(() => {
-      if (this.totalBoxesCreated < this.maxBoxes) {
-        this.createAndAddBox();
-      } else {
-        // Once we reach max, restart the cycle (keep stream continuous)
-        this.totalBoxesCreated = 0;
-      }
-    }, 300); // 300ms between box creation
-  }
-
-
-  // ✨ NEW: Create and add a single box
-  private createAndAddBox(): void {
-    if (!this.scene || this.totalBoxesCreated >= this.maxBoxes) return;
-
-    const group = this.createRealisticBox();
-    group.position.x = (Math.random() - 0.5) * 20;
-    group.position.y = 15; // Start at top (visible area)
-    group.position.z = (Math.random() - 0.5) * 20;
-    group.rotation.x = Math.random() * Math.PI;
-    group.rotation.y = Math.random() * Math.PI;
-    group.rotation.z = Math.random() * Math.PI;
-
-    group.userData.fallSpeed = Math.random() * 0.004 + 0.002;
-    group.userData.accel = 0.00002;
-    group.userData.rotationSpeedX = (Math.random() - 0.5) * 0.01;
-    group.userData.rotationSpeedY = (Math.random() - 0.5) * 0.01;
-    group.userData.rotationSpeedZ = (Math.random() - 0.5) * 0.008;
-    group.userData.swingAmplitude = Math.random() * 0.5 + 0.3;
-    group.userData.swingSpeed = Math.random() * 0.02 + 0.01;
-    group.userData.swingOffset = Math.random() * Math.PI * 2;
-
-    this.scene.add(group);
-    this.boxes.push(group);
-    this.fallingBoxes.push(group);
-    this.totalBoxesCreated++;
-  }
-
-
-  private createRealisticBox(): any {
-    const boxGroup = new THREE.Group();
-    const boxGeometry = new THREE.BoxGeometry(0.8, 0.8, 0.8);
-    const materials = [
-      new THREE.MeshBasicMaterial({ color: 0x9b7653 }),
-      new THREE.MeshBasicMaterial({ color: 0x7a5c3f }),
-      new THREE.MeshBasicMaterial({ color: 0xa68058 }),
-      new THREE.MeshBasicMaterial({ color: 0x6b4d32 }),
-      new THREE.MeshBasicMaterial({ color: 0x8b6f47 }),
-      new THREE.MeshBasicMaterial({ color: 0x7d6341 })
+    // Shared materials (use Standard for nicer lighting)
+    this.boxMaterials = [
+      new THREE.MeshStandardMaterial({ color: 0x9b7653 }),
+      new THREE.MeshStandardMaterial({ color: 0x7a5c3f }),
+      new THREE.MeshStandardMaterial({ color: 0xa68058 }),
+      new THREE.MeshStandardMaterial({ color: 0x6b4d32 }),
+      new THREE.MeshStandardMaterial({ color: 0x8b6f47 }),
+      new THREE.MeshStandardMaterial({ color: 0x7d6341 })
     ];
-    const box = new THREE.Mesh(boxGeometry, materials);
+
+    this.tapeMaterial = new THREE.MeshStandardMaterial({ color: 0xd4a574 });
+    this.labelMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff });
+    this.barcodeMaterial = new THREE.MeshStandardMaterial({ color: 0x000000 });
+    this.edgesMaterial = new THREE.LineBasicMaterial({ color: 0x5a4a3a });
+
+    // Pre-populate pool
+    for (let i = 0; i < this.initialPoolSize; i++) {
+      const box = this._createBoxFromSharedResources();
+      box.visible = false;
+      this.boxPool.push(box);
+    }
+  }
+
+  // Create a new box group using shared resources (used for pool and legacy createRealisticBox)
+  private _createBoxFromSharedResources(): any {
+    const boxGroup = new THREE.Group();
+
+    // box - use shared geometry and shared materials (face material array is supported)
+    const box = new THREE.Mesh(this.boxGeometry, this.boxMaterials);
+    box.castShadow = true;
+    box.receiveShadow = true;
     boxGroup.add(box);
 
-    const tapeGeometry = new THREE.BoxGeometry(0.82, 0.05, 0.05);
-    const tapeMaterial = new THREE.MeshBasicMaterial({ color: 0xd4a574 });
-    const tape1 = new THREE.Mesh(tapeGeometry, tapeMaterial);
+    // tape pieces
+    const tape1 = new THREE.Mesh(this.tapeGeometry, this.tapeMaterial);
     tape1.rotation.z = Math.PI / 2;
+    tape1.position.y = 0.02;
+    tape1.position.z = 0.41;
     boxGroup.add(tape1);
-    const tape2 = new THREE.Mesh(tapeGeometry, tapeMaterial);
+
+    const tape2 = new THREE.Mesh(this.tapeGeometry, this.tapeMaterial);
+    tape2.position.z = -0.41;
     boxGroup.add(tape2);
 
-    const edgesGeometry = new THREE.EdgesGeometry(boxGeometry);
-    const edgesMaterial = new THREE.LineBasicMaterial({ color: 0x5a4a3a });
-    const edges = new THREE.LineSegments(edgesGeometry, edgesMaterial);
+    // edges (reuse edgesGeometry & material)
+    const edges = new THREE.LineSegments(this.edgesGeometry, this.edgesMaterial);
     boxGroup.add(edges);
 
-    const labelGeometry = new THREE.PlaneGeometry(0.4, 0.25);
-    const labelMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
-    const label = new THREE.Mesh(labelGeometry, labelMaterial);
+    // label + barcode
+    const label = new THREE.Mesh(this.labelGeometry, this.labelMaterial);
     label.position.z = 0.41;
     boxGroup.add(label);
 
-    const barcodeGeometry = new THREE.PlaneGeometry(0.3, 0.08);
-    const barcodeMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
-    const barcode = new THREE.Mesh(barcodeGeometry, barcodeMaterial);
+    const barcode = new THREE.Mesh(this.barcodeGeometry, this.barcodeMaterial);
     barcode.position.z = 0.42;
     barcode.position.y = -0.05;
     boxGroup.add(barcode);
 
+    // default userData
+    boxGroup.userData = {
+      fallSpeed: Math.random() * 0.01 + 0.002,
+      accel: 0.00002,
+      rotationSpeedX: (Math.random() - 0.5) * 0.02,
+      rotationSpeedY: (Math.random() - 0.5) * 0.02,
+      rotationSpeedZ: (Math.random() - 0.5) * 0.01,
+      swingSpeed: Math.random() * 0.02 + 0.005,
+      swingAmplitude: Math.random() * 0.7,
+      swingOffset: Math.random() * Math.PI * 2
+    };
+
     return boxGroup;
   }
 
+  // Legacy name kept for compatibility — returns a fresh box using shared resources
+  private createRealisticBox(): any {
+    // Return a freshly created group (not popped from pool)
+    return this._createBoxFromSharedResources();
+  }
 
-  // animation loop
+  // spawn a single box using pool (preferred)
+  private spawnBoxAtRandom(): void {
+    // guard limit
+    if (this.fallingBoxes.length >= this.maxActiveBoxes) return;
+
+    let box: any | undefined = this.boxPool.pop();
+
+    if (!box) {
+      // fallback — create a new one (should be rare)
+      box = this._createBoxFromSharedResources();
+    }
+
+    // set random transform and userData
+    box.visible = true;
+    box.position.y = Math.random() * 10 + 10;
+    box.position.x = (Math.random() - 0.5) * 20;
+    box.position.z = (Math.random() - 0.5) * 20;
+    box.rotation.x = Math.random() * Math.PI;
+    box.rotation.y = Math.random() * Math.PI;
+    box.rotation.z = Math.random() * Math.PI;
+
+    box.userData.fallSpeed = Math.random() * 0.008 + 0.005;
+    box.userData.accel = Math.random() * 0.00003 + 0.00001;
+    box.userData.rotationSpeedX = (Math.random() - 0.5) * 0.025;
+    box.userData.rotationSpeedY = (Math.random() - 0.5) * 0.025;
+    box.userData.rotationSpeedZ = (Math.random() - 0.5) * 0.015;
+    box.userData.swingSpeed = Math.random() * 0.02 + 0.004;
+    box.userData.swingAmplitude = Math.random() * 0.7;
+    box.userData.swingOffset = Math.random() * Math.PI * 2;
+
+    // add to scene & active lists
+    this.scene.add(box);
+    this.fallingBoxes.push(box);
+
+    // keep boxes[] in sync (for legacy code that expects it)
+    this.boxes.push(box);
+  }
+
+  // Start spawn interval (rate-limited)
+  private startSpawning(): void {
+    if (this.spawnIntervalId) return;
+
+    // spawn small batches at controlled cadence
+    this.spawnIntervalId = setInterval(() => {
+      const toSpawn = Math.min(2, this.maxActiveBoxes - this.fallingBoxes.length);
+      for (let i = 0; i < toSpawn; i++) this.spawnBoxAtRandom();
+    }, 350); // 350 ms between spawn checks (tune as needed)
+  }
+
+  private stopSpawning(): void {
+    if (this.spawnIntervalId) {
+      clearInterval(this.spawnIntervalId);
+      this.spawnIntervalId = null;
+    }
+  }
+
+  // animation loop with recycling
   private animate = (): void => {
     if (!this.isAnimating) return;
     this.animationFrameId = requestAnimationFrame(this.animate);
     const time = Date.now() * 0.001;
 
-    this.fallingBoxes.forEach((box: any) => {
+    // iterate backwards to allow safe removal
+    for (let i = this.fallingBoxes.length - 1; i >= 0; i--) {
+      const box = this.fallingBoxes[i];
       const data = box.userData || {};
+
       box.position.y -= data.fallSpeed;
-      data.fallSpeed += 0.0001;
+      // gentle gravity
+      data.fallSpeed += data.accel ?? 0.00003;
 
       box.rotation.x += data.rotationSpeedX ?? 0;
       box.rotation.y += data.rotationSpeedY ?? 0;
@@ -326,23 +390,44 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       box.position.x += Math.sin(time * (data.swingSpeed ?? 0.01) + (data.swingOffset ?? 0)) * (data.swingAmplitude ?? 0.5) * 0.01;
       box.position.z += Math.cos(time * (data.swingSpeed ?? 0.01) * 0.7 + (data.swingOffset ?? 0)) * 0.005;
 
+      // Recycle when out of view
       if (box.position.y < -10) {
-        box.position.y = Math.random() * 10 + 20;
-        box.position.x = (Math.random() - 0.5) * 20;
-        box.position.z = (Math.random() - 0.5) * 20;
+        // remove from scene and return to pool
+        try { this.scene.remove(box); } catch (e) { /* ignore */ }
 
-        box.userData.fallSpeed = Math.random() * 0.008 + 0.005;
-        box.userData.rotationSpeedX = (Math.random() - 0.5) * 0.025;
-        box.userData.rotationSpeedY = (Math.random() - 0.5) * 0.025;
-        box.userData.rotationSpeedZ = (Math.random() - 0.5) * 0.015;
+        box.visible = false;
+        // reset transforms
+        box.position.set(0, 0, 0);
+        box.rotation.set(0, 0, 0);
+
+        // keep legacy boxes[] in sync
+        const boxesIndex = this.boxes.indexOf(box);
+        if (boxesIndex !== -1) this.boxes.splice(boxesIndex, 1);
+
+        // push back to pool
+        this.boxPool.push(box);
+        this.fallingBoxes.splice(i, 1);
       }
-    });
+    }
 
     if (this.renderer && this.scene && this.camera) {
       this.renderer.render(this.scene, this.camera);
     }
   };
 
+  private startAnimation(): void {
+    if (this.isAnimating) return;
+    this.isAnimating = true;
+    this.animate();
+  }
+
+  private stopAnimation(): void {
+    this.isAnimating = false;
+    if (this.animationFrameId) {
+      cancelAnimationFrame(this.animationFrameId);
+      this.animationFrameId = null;
+    }
+  }
 
   private onWindowResize(container: HTMLElement): void {
     if (!this.camera || !this.renderer) return;
@@ -352,7 +437,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(width, height);
   }
-
 
   private initCarousel(): void {
     const cardsNodeList = document.querySelectorAll('.service-card');
@@ -390,7 +474,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       this.carouselAutoRotate = setInterval(() => this.nextSlide(), 2500);
     });
   }
-
 
   private updateCarousel(): void {
     const cards = this.carouselCards;
@@ -447,14 +530,12 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-
   private nextSlide(): void {
     const count = this.carouselCards.length;
     if (!count) return;
     this.currentIndex = (this.currentIndex + 1) % count;
     this.updateCarousel();
   }
-
 
   private prevSlide(): void {
     const count = this.carouselCards.length;
@@ -463,14 +544,12 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.updateCarousel();
   }
 
-
   private goToSlide(index: number): void {
     const count = this.carouselCards.length;
     if (!count) return;
     this.currentIndex = index;
     this.updateCarousel();
   }
-
 
   private initServicesTrigger(): void {
     if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
@@ -488,7 +567,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-
   private initSmoothScroll(): void {
     const anchors = document.querySelectorAll('a[href^="#"]');
     anchors.forEach(anchor => {
@@ -502,7 +580,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       });
     });
   }
-
 
   private initMobileMenu(): void {
     const menuToggle = document.querySelector('.menu-toggle');
@@ -519,7 +596,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       });
     });
   }
-
 
   private initQuoteInteractions(): void {
     const quoteTrigger = document.getElementById('quote-trigger');
@@ -542,6 +618,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
         quotePage?.scrollIntoView({ behavior: 'smooth' });
 
         if (this.scene && typeof THREE !== 'undefined') {
+          // create a small burst - do not use spawn logic for one-off burst,
+          // instead create temporary boxes and remove them after timeout
           for (let i = 0; i < 15; i++) {
             const box = this.createRealisticBox();
             box.position.x = (Math.random() - 0.5) * 15;
@@ -558,15 +636,22 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
             box.userData.swingOffset = Math.random() * Math.PI * 2;
 
             this.scene.add(box);
-            this.boxes.push(box);
+            // add to active arrays so animate loop handles them
             this.fallingBoxes.push(box);
+            this.boxes.push(box);
 
+            // remove them after 5s (temporary)
             setTimeout(() => {
-              if (this.scene && this.boxes.includes(box)) {
-                this.scene.remove(box);
-                this.boxes = this.boxes.filter(b => b !== box);
-                this.fallingBoxes = this.fallingBoxes.filter(b => b !== box);
-              }
+              try { this.scene.remove(box); } catch (e) {}
+              const fbIndex = this.fallingBoxes.indexOf(box);
+              if (fbIndex !== -1) this.fallingBoxes.splice(fbIndex, 1);
+              const bIndex = this.boxes.indexOf(box);
+              if (bIndex !== -1) this.boxes.splice(bIndex, 1);
+              // dispose created parts? we used shared resources, so just reuse by pushing to pool
+              box.visible = false;
+              box.position.set(0, 0, 0);
+              box.rotation.set(0, 0, 0);
+              this.boxPool.push(box);
             }, 5000);
           }
         }
@@ -589,12 +674,17 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-
   private cleanup(): void {
-    this.isAnimating = false;
-    if (this.animationFrameId) cancelAnimationFrame(this.animationFrameId);
-    if (this.carouselAutoRotate) clearInterval(this.carouselAutoRotate);
-    if (this.boxCreateInterval) clearInterval(this.boxCreateInterval);
+    // stop animation + spawn
+    this.stopSpawning();
+    this.stopAnimation();
+
+    if (this.carouselAutoRotate) {
+      clearInterval(this.carouselAutoRotate);
+      this.carouselAutoRotate = null;
+    }
+
+    // remove renderer DOM
     if (this.renderer) {
       try {
         if (this.renderer.domElement?.parentNode) {
@@ -605,15 +695,48 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
         // ignore
       }
     }
-    this.boxes = [];
-    this.fallingBoxes = [];
+
+    // clear lists from scene
+    if (this.scene) {
+      // remove active boxes
+      this.fallingBoxes.forEach((b: any) => {
+        try { this.scene.remove(b); } catch (e) {}
+      });
+      this.fallingBoxes = [];
+      this.boxes = [];
+
+      // remove pooled boxes (they weren't in scene but safe to attempt)
+      this.boxPool.forEach((b: any) => {
+        try { this.scene.remove(b); } catch (e) {}
+      });
+      this.boxPool = [];
+    }
+
+    // dispose shared geometries & materials
+    try {
+      if (this.boxGeometry) this.boxGeometry.dispose();
+      if (this.tapeGeometry) this.tapeGeometry.dispose();
+      if (this.labelGeometry) this.labelGeometry.dispose();
+      if (this.barcodeGeometry) this.barcodeGeometry.dispose();
+      if (this.edgesGeometry) this.edgesGeometry.dispose();
+
+      this.boxMaterials.forEach(m => { try { m.dispose(); } catch (e) {} });
+      if (this.tapeMaterial) try { this.tapeMaterial.dispose(); } catch (e) {}
+      if (this.labelMaterial) try { this.labelMaterial.dispose(); } catch (e) {}
+      if (this.barcodeMaterial) try { this.barcodeMaterial.dispose(); } catch (e) {}
+      if (this.edgesMaterial) try { this.edgesMaterial.dispose(); } catch (e) {}
+    } catch (e) {
+      // ignore dispose errors
+    }
+
     this.scene = null;
     this.camera = null;
     this.renderer = null;
+    this.isAnimating = false;
+    this.animationFrameId = null;
   }
-
 
   ngOnDestroy(): void {
     this.cleanup();
-  }
+  }
 }
