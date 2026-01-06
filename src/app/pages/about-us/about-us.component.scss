@@ -1,3 +1,27 @@
+.gradient-text {
+background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  animation: gradientShift 3s ease-in-out infinite, fadeIn 0.8s ease-out;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 // Testimonials Section Styles
 .testimonials-section {
   margin: 80px 0 0 0;
@@ -49,7 +73,7 @@
       }
       .testimonial-role {
         font-size: 0.95rem;
-        color: #888;
+        color: #000000;
       }
     }
   }
@@ -142,7 +166,7 @@
     p {
       font-size: 1.1rem;
       line-height: 1.9;
-      color: var(--text-muted);
+      color: #000000;
       margin-bottom: 20px;
 
       @media (max-width: 600px) { font-size: 1rem; }
@@ -184,7 +208,7 @@
 }
 
 .why-card {
-  background: linear-gradient(180deg, var(--surface), #f7fbff);
+  background: linear-gradient(180deg, var(--surface), #b7d7f6);
   border: 1px solid var(--border-subtle);
   border-radius: 16px;
   padding: 40px;
@@ -216,7 +240,7 @@
   p {
     font-size: 1rem;
     line-height: 1.8;
-    color: var(--text-muted);
+    color: #24272e;
 
     @media (max-width: 600px) { font-size: 0.9rem; }
   }

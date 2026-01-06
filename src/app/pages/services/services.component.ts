@@ -6,7 +6,7 @@ import {
   PLATFORM_ID
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 
 declare const gsap: any;
 declare const ScrollTrigger: any;
@@ -22,7 +22,7 @@ interface ThreePLService {
 @Component({
   selector: 'app-services',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './services.component.html',
   styleUrls: ['./services.component.scss']
 })

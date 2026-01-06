@@ -51,7 +51,7 @@ export class AboutUsComponent implements AfterViewInit {
     {
       fullQuote: 'Partnering with One Way Fulfillment has taken a huge weight off our shoulders. They manage our inventory and order shipping with real precision, and their in-house freight team has saved us serious money on inbound deliveries. Everything arrives organized, packed clean, and out the door fast, which lets our team focus on growth instead of logistics headaches. Their inventory tools give us clear visibility into stock and order status at any time, and support is always quick and professional when we have questions. It feels like having an experienced internal logistics team without the overhead. Thanks One Way Fulfillment for being such a dependable partner.',
       author: 'Vigilante Team',
-      role: 'E-commerce Brand',
+      // role: 'E-commerce Brand',
       expanded: false
     },
     {
